@@ -65,17 +65,17 @@ export default async function IndustriesSection() {
   const industries = fallbackIndustries;
 
   return (
-    <section className="py-24 bg-white overflow-hidden">
-      <div className="container mx-auto px-6 lg:px-12">
-        <div className="text-center mb-16">
-          <span className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-gold">
+    <section className="py-12 sm:py-16 md:py-24 bg-white overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12">
+        <div className="text-center mb-10 sm:mb-16">
+          <span className="text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-brand-gold">
             Who We Help
           </span>
-          <h2 className="mt-4 text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
+          <h2 className="mt-4 text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
             <span className="text-brand-deep">Industries</span>{" "}
             <span className="text-brand-gold">We Serve</span>
           </h2>
-          <p className="mt-6 max-w-2xl mx-auto text-lg text-neutral-slate">
+          <p className="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-neutral-slate">
             Deep expertise across the sectors that drive Lesotho’s economy —
             and beyond.
           </p>

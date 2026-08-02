@@ -34,13 +34,13 @@ export default function AboutCard() {
   ];
 
   return (
-    <section className="py-20 bg-neutral-offwhite">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16 max-w-6xl mx-auto">
+    <section className="py-12 sm:py-16 md:py-20 bg-neutral-offwhite">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="flex flex-col lg:flex-row items-center gap-8 sm:gap-10 lg:gap-16 max-w-6xl mx-auto">
           {/* Main About Card */}
           <div className="flex-1 w-full max-w-2xl">
             <div
-              className="rounded-3xl shadow-2xl p-10 md:p-14 text-center text-white relative overflow-hidden"
+              className="rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10 lg:p-14 text-center text-white relative overflow-hidden"
               style={{
                 background: `url('${backgroundImage}'), linear-gradient(135deg, #0B2447 0%, #1E3A6D 100%)`,
                 backgroundSize: "cover",
@@ -51,13 +51,13 @@ export default function AboutCard() {
               <div className="absolute inset-0 bg-black/55 rounded-3xl" />
 
               <div className="relative z-10">
-                <span className="inline-block px-4 py-1.5 mb-5 text-xs font-semibold uppercase tracking-widest text-brand-gold bg-brand-gold/10 rounded-full">
+                <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 mb-4 sm:mb-5 text-[10px] sm:text-xs font-semibold uppercase tracking-widest text-brand-gold bg-brand-gold/10 rounded-full">
                   Get to Know Us Better
                 </span>
-                <h2 className="text-3xl md:text-4xl font-extrabold mb-6 tracking-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-4 sm:mb-6 tracking-tight">
                   About Us
                 </h2>
-                <p className="text-white/90 text-lg leading-relaxed max-w-2xl mx-auto mb-8">
+                <p className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-6 sm:mb-8">
                   We’re not just another IT company. We’re a full‑stack technology
                   partner based in Maseru, Lesotho, engineering integrated digital
                   solutions — from secure infrastructure to AI‑powered analytics —
@@ -71,7 +71,7 @@ export default function AboutCard() {
                 <Button
                   href="/about"
                   variant="gold"
-                  className="inline-flex items-center gap-2 px-8 py-3.5 text-base"
+                  className="inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3.5 text-sm sm:text-base"
                 >
                   <Users size={20} />
                   Meet Our Team

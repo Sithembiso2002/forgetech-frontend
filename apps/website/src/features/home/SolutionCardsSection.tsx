@@ -91,7 +91,7 @@ export default function SolutionCardsSection() {
         </motion.div>
 
         {/* Cards grid – two columns on mobile, three on desktop */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {solutions.map((solution, index) => (
             <motion.div
               key={solution.slug}

@@ -31,7 +31,6 @@ const slides: Slide[] = [
   },
 ];
 
-// Constant subcaption – never animates
 const CONSTANT_SUBCAPTION =
   "Custom software tailored to your business, built with modern technologies and agile processes.";
 
@@ -124,7 +123,7 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 py-20 lg:py-32 flex flex-col justify-between h-full">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 py-16 md:py-20 lg:py-32 flex flex-col justify-between h-full">
         {/* Top column */}
         <div className="max-w-3xl mx-auto lg:mx-0 lg:max-w-2xl">
           {/* Only the heading animates */}
@@ -136,7 +135,7 @@ export default function Hero() {
               exit={{ opacity: 0, y: -30 }}
               transition={{ duration: 0.9, ease: "easeOut" }}
             >
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] text-white mb-8">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.15] text-white mb-4 md:mb-6">
                 {current.caption}{" "}
                 <span className="text-brand-gold whitespace-nowrap">Real Results.</span>
               </h1>
@@ -144,18 +143,18 @@ export default function Hero() {
           </AnimatePresence>
 
           {/* Buttons – completely static */}
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
             <Button
               href="/contact"
               variant="gold"
-              className="px-8 py-3.5 text-base font-semibold shadow-2xl hover:scale-105 transition-transform"
+              className="px-5 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold shadow-2xl hover:scale-105 transition-transform"
             >
               Start a Project
             </Button>
             <Button
               href="/services"
               variant="outline"
-              className="px-8 py-3.5 text-base border-white/30 text-white hover:bg-white/10 flex items-center gap-2 hover:scale-105 transition-transform"
+              className="px-5 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base border-white/30 text-white hover:bg-white/10 flex items-center gap-2 hover:scale-105 transition-transform"
             >
               Learn More<ChevronRight size={18} />
             </Button>
@@ -163,16 +162,16 @@ export default function Hero() {
         </div>
 
         {/* Bottom row: Slide cards (left) + Subcaption + Trust points (right) */}
-        <div className="mt-12 flex flex-col lg:flex-row items-end justify-between gap-8">
+        <div className="mt-10 md:mt-12 flex flex-col lg:flex-row items-end justify-between gap-6 lg:gap-8">
           {/* Slide indicator cards – bottom LEFT */}
-          <div className="flex items-stretch gap-4">
+          <div className="flex items-stretch gap-2 sm:gap-3 md:gap-4 w-full lg:w-auto overflow-x-auto snap-x snap-mandatory scrollbar-hide">
             {slideCards.map((card, index) => {
               const isActive = index === currentSlide;
               return (
                 <motion.button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`relative flex flex-1 items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-300 ${
+                  className={`relative flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-left transition-all duration-300 snap-center shrink-0 ${
                     isActive
                       ? "bg-white/10 backdrop-blur-sm border border-brand-gold/30 shadow-lg scale-105"
                       : "bg-white/5 border border-white/10 hover:bg-white/10"
@@ -181,7 +180,7 @@ export default function Hero() {
                   whileTap={{ scale: 0.98 }}
                   aria-label={`Go to slide ${index + 1}`}
                 >
-                  <div className="relative w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+                  <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden flex-shrink-0">
                     <Image
                       src={card.image}
                       alt={card.label}
@@ -207,23 +206,23 @@ export default function Hero() {
           </div>
 
           {/* Right column: Subcaption + Trust indicators */}
-          <div className="flex flex-col items-end gap-4">
+          <div className="flex flex-col items-start lg:items-end gap-4 w-full lg:w-auto">
             {/* Constant subcaption – now above trust indicators */}
-            <p className="text-base md:text-lg text-white/80 max-w-md text-right">
+            <p className="text-sm sm:text-base md:text-lg text-white/80 max-w-md text-right">
               {CONSTANT_SUBCAPTION}
             </p>
 
             {/* Trust indicators – completely static */}
-            <div className="flex flex-wrap items-center gap-6 text-sm text-white/60">
-              <span className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-white/60">
+              <span className="flex items-center gap-1.5">
                 <Shield size={18} className="text-brand-gold" />
                 Enterprise‑Grade Security
               </span>
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-1.5">
                 <BarChart3 size={18} className="text-brand-gold" />
                 Data‑Driven Insights
               </span>
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-1.5">
                 <Cloud size={18} className="text-brand-gold" />
                 Cloud‑Native Architecture
               </span>

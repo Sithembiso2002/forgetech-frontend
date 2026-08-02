@@ -1,4 +1,3 @@
-// apps/website/src/features/home/IndustriesInteractive.tsx
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -24,14 +23,15 @@ export default function IndustriesInteractive({
   industries: Industry[];
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [lockedIndex, setLockedIndex] = useState<number | null>(null); // NEW
   const leftTrackRef = useRef<HTMLDivElement>(null);
-  const containerWidth = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null); // for outside‑click detection
   const [containerWidthPx, setContainerWidthPx] = useState(0);
 
   const [cardWidth, setCardWidth] = useState(220);
   const [gap, setGap] = useState(16);
 
-  const [isHovered, setIsHovered] = useState(false);   // NEW
+  const [isHovered, setIsHovered] = useState(false);
 
   const updateDimensions = useCallback((width: number) => {
     if (width < 640) {
@@ -47,7 +47,7 @@ export default function IndustriesInteractive({
   }, []);
 
   useEffect(() => {
-    const el = containerWidth.current;
+    const el = containerRef.current;
     if (!el) return;
 
     const observer = new ResizeObserver((entries) => {
@@ -67,8 +67,9 @@ export default function IndustriesInteractive({
 
   const duplicatedIndustries = [...industries, ...industries];
 
+  // Pause if hovered OR if a card is locked
   useAnimationFrame(() => {
-    if (isHovered) return;               // PAUSE
+    if (isHovered || lockedIndex !== null) return;
     let currentX = xMotion.get();
     currentX -= speed;
     if (currentX <= -totalWidth) {
@@ -77,8 +78,13 @@ export default function IndustriesInteractive({
     xMotion.set(currentX);
   });
 
+  // Auto‑detect active index from scroll position (only when not locked)
   useEffect(() => {
     const updateActiveIndex = () => {
+      if (lockedIndex !== null) {
+        setActiveIndex(lockedIndex);
+        return;
+      }
       const x = xMotion.get();
       const centerX = containerWidthPx / 2;
       let minDist = Infinity;
@@ -95,7 +101,20 @@ export default function IndustriesInteractive({
     };
     const unsubscribe = xMotion.on("change", updateActiveIndex);
     return () => unsubscribe();
-  }, [xMotion, containerWidthPx, industries.length, cardWidth, gap]);
+  }, [xMotion, containerWidthPx, industries.length, cardWidth, gap, lockedIndex]);
+
+  // Outside‑click listener: unlock if click is outside the carousel container
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setLockedIndex(null);
+      }
+    }
+    if (lockedIndex !== null) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [lockedIndex]);
 
   const activeIndustry = industries[activeIndex];
 
@@ -107,8 +126,8 @@ export default function IndustriesInteractive({
     >
       {/* LEFT COLUMN – Industry Carousel */}
       <div
-        ref={containerWidth}
-        className="lg:w-[60%] relative overflow-hidden h-[360px] sm:h-[420px] md:h-[520px] lg:h-[580px] xl:h-[620px] rounded-2xl"
+        ref={containerRef}
+        className="lg:w-[60%] relative overflow-hidden h-[320px] xs:h-[360px] sm:h-[420px] md:h-[520px] lg:h-[580px] xl:h-[620px] rounded-2xl"
       >
         <motion.div
           ref={leftTrackRef}
@@ -120,7 +139,12 @@ export default function IndustriesInteractive({
             return (
               <motion.div
                 key={`${industry.id}-${index}`}
-                className={`relative flex-shrink-0 w-[180px] sm:w-[200px] lg:w-[220px] h-full rounded-2xl overflow-hidden shadow-lg transition-all duration-300 ${
+                onClick={() => {
+                  const realIndex = index % industries.length;
+                  setLockedIndex(realIndex);
+                  setActiveIndex(realIndex);
+                }}
+                className={`relative flex-shrink-0 w-[180px] sm:w-[200px] lg:w-[220px] h-full rounded-2xl overflow-hidden shadow-lg transition-all duration-300 cursor-pointer ${
                   isActive ? "scale-105 border-2 border-brand-gold shadow-2xl" : "border border-white/20 opacity-80 hover:opacity-100"
                 }`}
               >
@@ -151,12 +175,12 @@ export default function IndustriesInteractive({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -30 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="rounded-3xl border border-neutral-border/60 bg-white p-8 md:p-10 shadow-xl shadow-slate-200/30 h-full"
+            className="rounded-3xl border border-neutral-border/60 bg-white p-6 sm:p-8 md:p-10 shadow-xl shadow-slate-200/30 h-full"
           >
-            <h3 className="text-3xl font-extrabold text-brand-deep mb-4">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-brand-deep mb-4">
               {activeIndustry.name}
             </h3>
-            <p className="text-lg text-neutral-slate leading-relaxed mb-6">
+            <p className="text-base sm:text-lg text-neutral-slate leading-relaxed mb-6">
               {activeIndustry.description}
             </p>
 
@@ -167,7 +191,7 @@ export default function IndustriesInteractive({
                 </h4>
                 <ul className="space-y-2">
                   {activeIndustry.benefits.map((benefit, i) => (
-                    <li key={i} className="flex items-start gap-2 text-neutral-slate">
+                    <li key={i} className="flex items-start gap-2 text-sm sm:text-base text-neutral-slate">
                       <CheckCircle size={16} className="text-brand-tech mt-0.5 flex-shrink-0" />
                       <span>{benefit}</span>
                     </li>
@@ -176,11 +200,9 @@ export default function IndustriesInteractive({
               </div>
             )}
 
-            
-
             <a
               href={`/industries/${activeIndustry.slug}`}
-              className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-6 py-3 text-sm font-bold text-brand-navy shadow-lg transition-all duration-300 hover:bg-brand-orange hover:shadow-xl hover:scale-105"
+              className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-5 sm:px-6 py-2.5 sm:py-3 text-sm font-bold text-brand-navy shadow-lg transition-all duration-300 hover:bg-brand-orange hover:shadow-xl hover:scale-105"
             >
               {activeIndustry.cta}
               <ArrowRight size={16} />

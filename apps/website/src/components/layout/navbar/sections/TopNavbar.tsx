@@ -85,32 +85,7 @@ export default function TopNavbar({ onMobileMenuToggle, mobileMenuOpen }: TopNav
 
         {/* RIGHT – Pills (language, careers, support) + Search + Mobile toggle */}
         <div className="flex items-center gap-2 sm:gap-4">
-          {/* Language pill */}
-          <div ref={langRef} className="relative hidden sm:block">
-            <button
-              onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1 text-white/75 hover:text-white transition text-xs"
-            >
-              <Globe size={14} />
-              <span className="font-medium">{currentLang.code.toUpperCase()}</span>
-              <ChevronDown size={12} className={`transition ${langOpen ? "rotate-180" : ""}`} />
-            </button>
-            {langOpen && (
-              <div className="absolute right-0 top-full mt-2 w-36 bg-white rounded-xl shadow-xl overflow-hidden transition-all duration-200 z-50">
-                {languages.map(lang => (
-                  <button
-                    key={lang.code}
-                    onClick={() => switchLanguage(lang)}
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
-                      currentLang.code === lang.code ? "text-brand-tech font-semibold" : "text-gray-700"
-                    }`}
-                  >
-                    {lang.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+         
 
           {/* Careers pill (hidden on smallest screens, shown as icon only) */}
           <Link

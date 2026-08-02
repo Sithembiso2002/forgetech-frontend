@@ -40,18 +40,18 @@ export default function NewsletterSection() {
   };
 
   return (
-    <section className="py-24 bg-white border-t border-neutral-border/60">
-      <div className="container mx-auto px-6">
+    <section className="py-16 md:py-24 bg-white border-t border-neutral-border/60">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold text-brand-deep mb-4">
             Get our latest insights straight to your inbox
           </h2>
-          <p className="text-lg text-neutral-slate mb-8">
+          <p className="text-base sm:text-lg text-neutral-slate mb-8">
             Stay ahead with practical technology guides, industry news, and tips — delivered monthly.
           </p>
 
           {submitted ? (
-            <div className="bg-brand-gold/10 border border-brand-gold/30 rounded-2xl p-6 animate-in fade-in">
+            <div className="bg-brand-gold/10 border border-brand-gold/30 rounded-2xl p-4 sm:p-6 animate-in fade-in">
               <p className="font-semibold text-lg text-brand-deep">Thank you for subscribing!</p>
               <p className="text-sm text-neutral-slate mt-1">We’ll keep you posted.</p>
             </div>
@@ -66,12 +66,12 @@ export default function NewsletterSection() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="flex-1 border border-neutral-border rounded-xl px-5 py-3 text-sm text-brand-deep placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-tech focus:border-transparent bg-white"
+                className="flex-1 border border-neutral-border rounded-xl px-4 sm:px-5 py-2.5 sm:py-3 text-sm text-brand-deep placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-tech focus:border-transparent bg-white"
               />
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex items-center justify-center gap-2 bg-brand-gold text-brand-navy font-semibold px-6 py-3 rounded-xl hover:bg-brand-orange transition-colors shadow-sm disabled:opacity-70"
+                className="inline-flex items-center justify-center gap-2 bg-brand-gold text-brand-navy font-semibold px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl hover:bg-brand-orange transition-colors shadow-sm disabled:opacity-70"
               >
                 {loading ? (
                   <Loader2 size={16} className="animate-spin" />

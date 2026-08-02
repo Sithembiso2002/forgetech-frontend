@@ -59,18 +59,18 @@ export default function NewsCarousel({ news }: { news: NewsItem[] }) {
   const nextIndex = wrapIndex(current + 1);
 
   return (
-    <section className="py-28 bg-gradient-to-b from-white to-neutral-offwhite/50 overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section className="py-16 md:py-28 bg-gradient-to-b from-white to-neutral-offwhite/50 overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header – refined typography */}
-        <div className="text-center mb-20">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 text-xs font-semibold uppercase tracking-widest bg-brand-tech/10 text-brand-tech border border-brand-tech/20 rounded-full">
+        <div className="text-center mb-12 md:mb-20">
+          <span className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 mb-4 sm:mb-6 text-[10px] sm:text-xs font-semibold uppercase tracking-widest bg-brand-tech/10 text-brand-tech border border-brand-tech/20 rounded-full">
             <span className="w-2 h-2 rounded-full bg-brand-tech animate-pulse" />
             Latest Updates
           </span>
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight text-brand-deep">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight text-brand-deep">
             News &amp; Insights
           </h2>
-          <p className="mt-6 text-lg md:text-xl text-neutral-slate max-w-2xl mx-auto">
+          <p className="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-neutral-slate max-w-2xl mx-auto px-2">
             Stay updated with our latest events, community involvement, and industry perspectives.
           </p>
         </div>
@@ -85,30 +85,30 @@ export default function NewsCarousel({ news }: { news: NewsItem[] }) {
           <button
             onClick={prev}
             aria-label="Previous slide"
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-white/80 backdrop-blur-md shadow-xl hover:shadow-2xl hover:bg-white hover:scale-110 transition-all flex items-center justify-center -ml-7 border border-white/60"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/80 backdrop-blur-md shadow-xl hover:shadow-2xl hover:bg-white hover:scale-110 transition-all flex items-center justify-center -ml-5 md:-ml-7 border border-white/60"
           >
-            <ChevronLeft className="w-6 h-6 text-brand-deep" />
+            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-brand-deep" />
           </button>
           <button
             onClick={next}
             aria-label="Next slide"
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-white/80 backdrop-blur-md shadow-xl hover:shadow-2xl hover:bg-white hover:scale-110 transition-all flex items-center justify-center -mr-7 border border-white/60"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/80 backdrop-blur-md shadow-xl hover:shadow-2xl hover:bg-white hover:scale-110 transition-all flex items-center justify-center -mr-5 md:-mr-7 border border-white/60"
           >
-            <ChevronRight className="w-6 h-6 text-brand-deep" />
+            <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-brand-deep" />
           </button>
 
-          {/* Slides Viewport – taller */}
-          <div className="relative h-[450px] md:h-[600px] flex items-center justify-center overflow-hidden">
+          {/* Slides Viewport */}
+          <div className="relative h-[400px] md:h-[600px] flex items-center justify-center overflow-hidden">
             <AnimatePresence initial={false} custom={direction}>
               {/* Previous Slide */}
               <motion.div
                 key={`prev-${news[prevIndex].id}`}
                 custom={direction}
                 initial={{ x: -220, opacity: 0, scale: 0.82, rotateY: 15 }}
-                animate={{ x: -130, opacity: 0.6, scale: 0.88, rotateY: 10 }}
+                animate={{ x: -60, opacity: 0.6, scale: 0.88, rotateY: 10, md: { x: -130, scale: 0.88, rotateY: 10 } } as any}
                 exit={{ x: -220, opacity: 0, scale: 0.82, rotateY: 15 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="absolute left-0 w-[55%] md:w-[50%] h-[85%] cursor-pointer z-0"
+                className="absolute left-0 w-[60%] md:w-[50%] h-[85%] cursor-pointer z-0"
                 onClick={() => goTo(prevIndex)}
               >
                 <SlideCard news={news[prevIndex]} isActive={false} />
@@ -122,7 +122,7 @@ export default function NewsCarousel({ news }: { news: NewsItem[] }) {
                 animate={{ x: 0, opacity: 1, scale: 1, rotateY: 0 }}
                 exit={{ x: direction > 0 ? -350 : 350, opacity: 0, scale: 0.9, rotateY: direction > 0 ? 15 : -15 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="absolute z-10 w-[85%] md:w-[70%] h-full shadow-2xl rounded-3xl overflow-hidden"
+                className="absolute z-10 w-[90%] md:w-[70%] h-full shadow-2xl rounded-3xl overflow-hidden"
               >
                 <motion.div
                   animate={{ y: [0, -8, 0] }}
@@ -138,10 +138,10 @@ export default function NewsCarousel({ news }: { news: NewsItem[] }) {
                 key={`next-${news[nextIndex].id}`}
                 custom={direction}
                 initial={{ x: 220, opacity: 0, scale: 0.82, rotateY: -15 }}
-                animate={{ x: 130, opacity: 0.6, scale: 0.88, rotateY: -10 }}
+                animate={{ x: 60, opacity: 0.6, scale: 0.88, rotateY: -10, md: { x: 130, scale: 0.88, rotateY: -10 } } as any}
                 exit={{ x: 220, opacity: 0, scale: 0.82, rotateY: -15 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="absolute right-0 w-[55%] md:w-[50%] h-[85%] cursor-pointer z-0"
+                className="absolute right-0 w-[60%] md:w-[50%] h-[85%] cursor-pointer z-0"
                 onClick={() => goTo(nextIndex)}
               >
                 <SlideCard news={news[nextIndex]} isActive={false} />
@@ -150,7 +150,7 @@ export default function NewsCarousel({ news }: { news: NewsItem[] }) {
           </div>
 
           {/* Progress‑based dot indicators */}
-          <div className="flex justify-center gap-3 mt-10">
+          <div className="flex justify-center gap-3 mt-8 md:mt-10">
             {news.map((_, index) => (
               <button
                 key={index}
@@ -202,27 +202,27 @@ function SlideCard({ news, isActive }: { news: NewsItem; isActive: boolean }) {
         <div className="absolute -inset-0.5 bg-gradient-to-r from-brand-gold/10 to-brand-tech/10 rounded-3xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
       )}
       {/* Text content */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 text-white">
-        <span className="text-xs font-semibold uppercase tracking-widest text-brand-gold">
+      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-10 text-white">
+        <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest text-brand-gold">
           {news.date}
         </span>
         <h3
-          className={`font-extrabold mt-2 mb-3 leading-tight transition-all duration-300 ${
-            isActive ? "text-3xl md:text-5xl" : "text-xl md:text-3xl"
+          className={`font-extrabold mt-1 sm:mt-2 mb-2 sm:mb-3 leading-tight transition-all duration-300 ${
+            isActive ? "text-xl sm:text-3xl md:text-5xl" : "text-lg sm:text-xl md:text-3xl"
           }`}
         >
           {news.title}
         </h3>
         {isActive && (
-          <p className="text-sm md:text-lg text-white/80 line-clamp-2 mb-6">
+          <p className="text-xs sm:text-sm md:text-lg text-white/80 line-clamp-2 mb-4 sm:mb-6">
             {news.summary}
           </p>
         )}
         <a
           href={`/resources/news/${news.slug}`}
-          className="inline-flex items-center gap-1 text-sm font-bold text-brand-gold hover:text-brand-orange transition-colors"
+          className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-brand-gold hover:text-brand-orange transition-colors"
         >
-          Read more <ArrowRight size={16} />
+          Read more <ArrowRight size={14} className="sm:w-4 sm:h-4" />
         </a>
       </div>
     </div>

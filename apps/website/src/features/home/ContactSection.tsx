@@ -1,4 +1,3 @@
-// apps/website/src/features/home/ContactSection.tsx
 "use client";
 
 import { useState } from "react";
@@ -106,10 +105,10 @@ export default function ContactSection() {
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 xl:gap-24">
           {/* ───── LEFT COLUMN ───── */}
           <div className="lg:w-[40%]">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-brand-deep leading-tight mb-4 md:mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold text-brand-deep leading-tight mb-4 md:mb-6">
               Let’s set up a call
             </h2>
-            <p className="text-base md:text-lg text-neutral-slate mb-8 md:mb-10 leading-relaxed">
+            <p className="text-sm md:text-lg text-neutral-slate mb-8 md:mb-10 leading-relaxed">
               Leave your info and a few words about the project. We’ll review it
               and reach out to book a call.
             </p>

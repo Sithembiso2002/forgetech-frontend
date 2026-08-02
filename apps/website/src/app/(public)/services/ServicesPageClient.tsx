@@ -174,7 +174,7 @@ export default function ServicesPageClient({
                   <h3 className="text-xl md:text-3xl font-extrabold text-brand-deep mb-8 md:mb-10 text-center">
                     What’s Included
                   </h3>
-                  <div className="grid grid-cols-2 gap-4 md:gap-8">
+                  <div className="grid grid-cols-1 gap-4 md:gap-8">
                     {service.subServices.map((sub: any, idx: number) => (
                       <motion.div
                         key={idx}

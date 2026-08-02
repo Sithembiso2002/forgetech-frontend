@@ -19,7 +19,6 @@ import {
   FolderOpen,
   BookOpen,
   MessageCircle,
-  Globe,
   Briefcase,
   LifeBuoy,
   ArrowRight,
@@ -37,10 +36,11 @@ import {
   Newspaper,
   FileText,
   Users,
+  Globe,
 } from "lucide-react";
 
 // ----------------------------------------------------------------------
-// Custom Social Icons (inline SVGs)
+// Custom Social Icons (inline SVGs) – unchanged
 // ----------------------------------------------------------------------
 const FacebookIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -67,7 +67,7 @@ const WhatsAppIcon = ({ size = 20, className = "" }: { size?: number; className?
 );
 
 // ----------------------------------------------------------------------
-// Types & Constants
+// Types & Constants (unchanged)
 // ----------------------------------------------------------------------
 interface NavItem {
   label: string;
@@ -77,19 +77,12 @@ interface NavItem {
   children?: NavItem[];
 }
 
-const languages = [
-  { code: "en", label: "English" },
-  { code: "fr", label: "Français" },
-  { code: "st", label: "Sesotho" },
-];
-
 const contactInfo = [
   { icon: Phone, label: "Sales", value: "+266 6301 3383", href: "tel:+26663013383" },
   { icon: Headphones, label: "Support", value: "+266 6301 3383", href: "tel:+26663013383" },
   { icon: Mail, label: "Email", value: "info@forgetechnobles.com", href: "mailto:info@forgetechnobles.com" },
 ];
 
-// Social icons – now using custom SVG components
 const socialLinks = [
   { icon: FacebookIcon, href: "https://facebook.com", label: "Facebook" },
   { icon: InstagramIcon, href: "https://instagram.com", label: "Instagram" },
@@ -97,7 +90,6 @@ const socialLinks = [
   { icon: WhatsAppIcon, href: "https://wa.me/26663013383", label: "WhatsApp" },
 ];
 
-// Main navigation structure
 const mainNavLinks: NavItem[] = [
   { label: "Home", href: "/", icon: Home, description: "Back to homepage" },
   {
@@ -108,8 +100,6 @@ const mainNavLinks: NavItem[] = [
     children: [
       { label: "IT Infrastructure & Networking", href: "/services/infrastructure", icon: Shield },
       { label: "Custom Software Development", href: "/services/software", icon: Code },
-      { label: "Web Development", href: "/services/web-development", icon: Monitor },
-      { label: "Mobile App Development", href: "/services/mobile", icon: Smartphone },
       { label: "Cloud Solutions", href: "/services/cloud", icon: Cloud },
       { label: "Data & Analytics", href: "/services/analytics", icon: BarChart3 },
       { label: "IT Support Services", href: "/services/support", icon: Headphones },
@@ -123,12 +113,8 @@ const mainNavLinks: NavItem[] = [
     description: "Tailored for your industry",
     children: [
       { label: "SMEs", href: "/solutions/sme", icon: Briefcase },
-      { label: "Enterprise", href: "/solutions/enterprise", icon: Building2 },
-      { label: "Government", href: "/solutions/government", icon: Landmark },
+      { label: "Enterprise & Government", href: "/solutions/enterprise", icon: Building2 },
       { label: "NGOs", href: "/solutions/ngo", icon: Users },
-      { label: "Education", href: "/solutions/education", icon: GraduationCap },
-      { label: "Healthcare", href: "/solutions/healthcare", icon: HeartPulse },
-      { label: "Hospitality", href: "/solutions/hospitality", icon: Hotel },
     ],
   },
   { label: "Case Studies", href: "/case-studies", icon: FolderOpen, description: "Our success stories" },
@@ -143,7 +129,6 @@ const mainNavLinks: NavItem[] = [
       { label: "Technology Guides", href: "/resources/guides", icon: FileText },
     ],
   },
-  { label: "Contact", href: "/contact", icon: MessageCircle, description: "Get in touch" },
 ];
 
 interface SideNavbarProps {
@@ -155,36 +140,17 @@ interface SideNavbarProps {
 // Component
 // ----------------------------------------------------------------------
 export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
-  // Accordion state
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
-  // Language dropdown state
-  const [langOpen, setLangOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState(languages[0]);
-  const langRef = useRef<HTMLDivElement>(null);
-  // Search
   const [searchQuery, setSearchQuery] = useState("");
   const drawerRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
-  // Toggle accordion section
   const toggleSection = useCallback((label: string) => {
     setExpandedSections(prev =>
       prev.includes(label) ? prev.filter(s => s !== label) : [...prev, label]
     );
   }, []);
 
-  // Close language dropdown on outside click
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      if (langRef.current && !langRef.current.contains(e.target as Node)) {
-        setLangOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
-  // Close drawer on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -195,7 +161,6 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Lock body scroll when open
   useEffect(() => {
     if (isOpen) {
       previousActiveElement.current = document.activeElement as HTMLElement;
@@ -208,11 +173,6 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
-
-  const switchLanguage = (lang: typeof languages[0]) => {
-    setCurrentLang(lang);
-    setLangOpen(false);
-  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -230,7 +190,6 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          {/* Dark overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -240,7 +199,6 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
             onClick={onClose}
           />
 
-          {/* Drawer – slides in from left */}
           <motion.div
             ref={drawerRef}
             initial={{ x: "-100%" }}
@@ -252,11 +210,11 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
             aria-modal="true"
             aria-label="Main navigation"
           >
-            {/* ── Header with logo centered + close button absolute right ── */}
-            <div className="px-5 pt-6 pb-4 border-b border-gray-200/50">
-              <div className="relative flex items-center justify-center mb-4">
-                <Link href="/" onClick={handleNavClick} className="flex items-center gap-3">
-                  <div className="relative w-10 h-10 sm:w-12 sm:h-12">
+            {/* ── Header (responsive tweaks retained) ── */}
+            <div className="px-4 sm:px-5 pt-5 sm:pt-6 pb-3 sm:pb-4 border-b border-gray-200/50">
+              <div className="relative flex items-center justify-center mb-3 sm:mb-4">
+                <Link href="/" onClick={handleNavClick} className="flex items-center gap-2 sm:gap-3">
+                  <div className="relative w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12">
                     <Image
                       src="/images/logo/logo2.png"
                       alt="ForgeTech Nobles"
@@ -266,60 +224,30 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-lg font-extrabold text-[#0B2447]">
+                    <span className="text-base sm:text-lg font-extrabold text-[#0B2447]">
                       ForgeTech<span className="text-[#F5B11A]">Nobles</span>
                     </span>
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-gray-500">
+                    <span className="text-[8px] sm:text-[10px] uppercase tracking-[0.2em] text-gray-500">
                       Smart Systems. Real Results.
                     </span>
                   </div>
                 </Link>
                 <button
                   onClick={onClose}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 p-1.5 sm:p-2 rounded-full hover:bg-gray-100 transition-colors"
                   aria-label="Close menu"
                 >
-                  <X size={22} className="text-gray-700" />
+                  <X size={20} className="text-gray-700" />
                 </button>
               </div>
 
-              {/* Pills: Language, Careers, Support (left‑aligned) */}
-              <div className="flex items-center gap-2 flex-wrap">
-                {/* Language pill */}
-                <div ref={langRef} className="relative">
-                  <button
-                    onClick={() => setLangOpen(!langOpen)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-xs font-medium text-gray-700 hover:bg-gray-200 transition-colors"
-                  >
-                    <Globe size={14} />
-                    {currentLang.code.toUpperCase()}
-                    <ChevronDown size={12} className={`transition-transform ${langOpen ? "rotate-180" : ""}`} />
-                  </button>
-                  {langOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -5 }}
-                      className="absolute left-0 top-full mt-2 w-36 bg-white rounded-xl shadow-lg border border-gray-200 py-1 z-50"
-                    >
-                      {languages.map(lang => (
-                        <button
-                          key={lang.code}
-                          onClick={() => switchLanguage(lang)}
-                          className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${lang.code === currentLang.code ? "text-[#00A8E8] font-semibold" : "text-gray-700"}`}
-                        >
-                          {lang.label}
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </div>
-
-                <Link href="/careers" onClick={handleNavClick} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-xs font-medium text-gray-700 hover:bg-gray-200 transition-colors">
+              {/* Pills – Careers & Support only (language removed) */}
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                <Link href="/careers" onClick={handleNavClick} className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-100 text-[10px] sm:text-xs font-medium text-gray-700 hover:bg-gray-200 transition-colors">
                   <Briefcase size={14} />
                   Careers
                 </Link>
-                <Link href="/support" onClick={handleNavClick} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-xs font-medium text-gray-700 hover:bg-gray-200 transition-colors">
+                <Link href="/support" onClick={handleNavClick} className="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gray-100 text-[10px] sm:text-xs font-medium text-gray-700 hover:bg-gray-200 transition-colors">
                   <LifeBuoy size={14} />
                   Support
                 </Link>
@@ -327,39 +255,37 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
             </div>
 
             {/* ── Scrollable content ── */}
-            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-6">
-              {/* Search */}
+            <div className="flex-1 overflow-y-auto px-4 sm:px-5 py-3 sm:py-4 space-y-5 sm:space-y-6">
               <form onSubmit={handleSearch} className="relative">
-                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search services, projects..."
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00A8E8]/30 focus:border-[#00A8E8] transition-all"
+                  className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-xl border border-gray-200 bg-gray-50 text-xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00A8E8]/30 focus:border-[#00A8E8] transition-all"
                 />
               </form>
 
-              {/* Navigation cards */}
-              <nav className="space-y-3">
+              <nav className="space-y-2 sm:space-y-3">
                 {mainNavLinks.map(link => (
                   <div key={link.label}>
                     {link.children ? (
                       <>
                         <motion.button
                           onClick={() => toggleSection(link.label)}
-                          className="w-full flex items-center justify-between p-4 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow group"
+                          className="w-full flex items-center justify-between p-3 sm:p-4 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow group"
                           whileTap={{ scale: 0.98 }}
                         >
-                          <div className="flex items-center gap-3">
-                            {link.icon && <link.icon size={22} className="text-[#00A8E8] group-hover:text-[#1E3A6D] transition-colors" />}
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            {link.icon && <link.icon size={20} className="text-[#00A8E8] group-hover:text-[#1E3A6D] transition-colors" />}
                             <div className="text-left">
-                              <div className="text-sm font-semibold text-[#1F2937]">{link.label}</div>
-                              {link.description && <div className="text-xs text-gray-500">{link.description}</div>}
+                              <div className="text-xs sm:text-sm font-semibold text-[#1F2937]">{link.label}</div>
+                              {link.description && <div className="text-[10px] sm:text-xs text-gray-500">{link.description}</div>}
                             </div>
                           </div>
                           <ChevronDown
-                            size={18}
+                            size={16}
                             className={`text-gray-400 transition-transform duration-200 ${expandedSections.includes(link.label) ? "rotate-180" : ""}`}
                           />
                         </motion.button>
@@ -370,17 +296,17 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
                               animate={{ height: "auto", opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.25, ease: "easeInOut" }}
-                              className="overflow-hidden pl-4 mt-2 space-y-2"
+                              className="overflow-hidden pl-3 sm:pl-4 mt-1 sm:mt-2 space-y-1.5 sm:space-y-2"
                             >
                               {link.children.map(child => (
                                 <Link
                                   key={child.label}
                                   href={child.href}
                                   onClick={handleNavClick}
-                                  className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 bg-white hover:shadow-sm hover:border-[#00A8E8]/30 transition-all group"
+                                  className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl border border-gray-100 bg-white hover:shadow-sm hover:border-[#00A8E8]/30 transition-all group"
                                 >
-                                  {child.icon && <child.icon size={18} className="text-[#00A8E8] group-hover:text-[#1E3A6D]" />}
-                                  <span className="text-sm font-medium text-gray-700">{child.label}</span>
+                                  {child.icon && <child.icon size={16} className="text-[#00A8E8] group-hover:text-[#1E3A6D]" />}
+                                  <span className="text-xs sm:text-sm font-medium text-gray-700">{child.label}</span>
                                 </Link>
                               ))}
                             </motion.div>
@@ -391,16 +317,16 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
                       <Link
                         href={link.href}
                         onClick={handleNavClick}
-                        className="flex items-center justify-between p-4 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow group"
+                        className="flex items-center justify-between p-3 sm:p-4 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow group"
                       >
-                        <div className="flex items-center gap-3">
-                          {link.icon && <link.icon size={22} className="text-[#00A8E8] group-hover:text-[#1E3A6D] transition-colors" />}
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          {link.icon && <link.icon size={20} className="text-[#00A8E8] group-hover:text-[#1E3A6D] transition-colors" />}
                           <div className="text-left">
-                            <div className="text-sm font-semibold text-[#1F2937]">{link.label}</div>
-                            {link.description && <div className="text-xs text-gray-500">{link.description}</div>}
+                            <div className="text-xs sm:text-sm font-semibold text-[#1F2937]">{link.label}</div>
+                            {link.description && <div className="text-[10px] sm:text-xs text-gray-500">{link.description}</div>}
                           </div>
                         </div>
-                        <ChevronRight size={18} className="text-gray-400" />
+                        <ChevronRight size={16} className="text-gray-400" />
                       </Link>
                     )}
                   </div>
@@ -409,60 +335,60 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
 
               {/* CTA Card */}
               <motion.div
-                className="rounded-3xl bg-gradient-to-br from-[#1E3A6D] to-[#0B2447] p-6 text-white shadow-xl"
+                className="rounded-3xl bg-gradient-to-br from-[#1E3A6D] to-[#0B2447] p-4 sm:p-6 text-white shadow-xl"
                 whileHover={{ scale: 1.02 }}
               >
-                <h3 className="text-lg font-bold mb-2">Need help building your next digital solution?</h3>
-                <p className="text-sm text-white/70 mb-4">Talk to our engineers today.</p>
+                <h3 className="text-base sm:text-lg font-bold mb-2">Need help building your next digital solution?</h3>
+                <p className="text-xs sm:text-sm text-white/70 mb-4">Talk to our engineers today.</p>
                 <Link
                   href="/contact"
                   onClick={handleNavClick}
-                  className="flex items-center justify-center gap-2 w-full py-3 rounded-full bg-[#F5B11A] text-[#0B2447] font-bold text-sm shadow-lg hover:shadow-xl transition-all"
+                  className="flex items-center justify-center gap-2 w-full py-2.5 sm:py-3 rounded-full bg-[#F5B11A] text-[#0B2447] font-bold text-xs sm:text-sm shadow-lg hover:shadow-xl transition-all"
                 >
-                  <Phone size={16} />
+                  <Phone size={14} />
                   Book Consultation
-                  <ArrowRight size={16} />
+                  <ArrowRight size={14} />
                 </Link>
               </motion.div>
 
               {/* Contact cards */}
-              <div className="space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 {contactInfo.map(contact => (
                   <a
                     key={contact.label}
                     href={contact.href}
-                    className="flex items-center gap-4 p-4 rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow group"
+                    className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow group"
                   >
-                    <div className="w-10 h-10 rounded-full bg-[#F5B11A]/10 flex items-center justify-center">
-                      <contact.icon size={20} className="text-[#F5B11A] group-hover:text-[#1E3A6D] transition-colors" />
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#F5B11A]/10 flex items-center justify-center">
+                      <contact.icon size={16} className="text-[#F5B11A] group-hover:text-[#1E3A6D] transition-colors" />
                     </div>
                     <div>
-                      <div className="text-xs font-semibold text-gray-500 uppercase">{contact.label}</div>
-                      <div className="text-sm font-medium text-[#1F2937]">{contact.value}</div>
+                      <div className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase">{contact.label}</div>
+                      <div className="text-xs sm:text-sm font-medium text-[#1F2937]">{contact.value}</div>
                     </div>
                   </a>
                 ))}
               </div>
 
-              {/* Social icons – now Facebook, Instagram, GitHub, WhatsApp */}
-              <div className="flex items-center gap-3 justify-center">
+              {/* Social icons */}
+              <div className="flex items-center gap-2 sm:gap-3 justify-center">
                 {socialLinks.map(social => (
                   <a
                     key={social.label}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-[#1E3A6D] hover:text-white transition-colors"
+                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-[#1E3A6D] hover:text-white transition-colors"
                     aria-label={social.label}
                   >
-                    <social.icon size={20} className="text-current" />
+                    <social.icon size={16} className="text-current" />
                   </a>
                 ))}
               </div>
             </div>
 
             {/* ── Footer ── */}
-            <div className="px-5 py-4 border-t border-gray-200/50 text-center">
+            <div className="px-4 sm:px-5 py-3 sm:py-4 border-t border-gray-200/50 text-center">
               <p className="text-xs font-semibold text-[#0B2447]">ForgeTech Nobles</p>
               <p className="text-[10px] text-gray-500">Version 2026 · © {new Date().getFullYear()}</p>
             </div>

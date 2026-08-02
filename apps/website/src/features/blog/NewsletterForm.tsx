@@ -14,16 +14,19 @@ export default function NewsletterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 max-w-md mx-auto">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto"
+    >
       <input
         type="email"
         placeholder="Your email address"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="flex-1 bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder:text-white/40 focus:outline-none focus:border-brand-gold"
+        className="flex-1 bg-white/10 border border-white/20 rounded-lg px-4 py-3 sm:py-2.5 text-white placeholder:text-white/40 focus:outline-none focus:border-brand-gold"
         required
       />
-      <Button type="submit" variant="gold">
+      <Button type="submit" variant="gold" className="w-full sm:w-auto">
         Subscribe
       </Button>
     </form>

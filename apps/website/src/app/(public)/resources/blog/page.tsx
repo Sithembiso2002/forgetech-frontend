@@ -5,7 +5,6 @@ import { Calendar, Clock, ArrowRight, Newspaper } from "lucide-react";
 import { getBlogPosts } from "@/lib/api";
 import NewsletterForm from "@/features/blog/NewsletterForm";
 
-// Fallback data — only used when the API is completely unreachable
 const fallbackPosts = [
   {
     id: "1",
@@ -91,7 +90,7 @@ export default async function BlogPage() {
   return (
     <>
       {/* Hero – deep navy with subtle gradient */}
-      <section className="relative bg-brand-navy text-white py-16 md:py-28 overflow-hidden">
+      <section className="relative bg-brand-navy text-white py-12 md:py-28 overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20" />
         <div className="relative container mx-auto px-4 sm:px-6 text-center">
           <span className="inline-block px-3 py-1 mb-4 text-xs md:text-sm font-semibold bg-brand-tech/20 text-brand-tech border border-brand-tech/30 rounded-full">
@@ -125,7 +124,7 @@ export default async function BlogPage() {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
               {posts.map((post: any) => (
                 <Link
                   key={post.id}
@@ -139,7 +138,7 @@ export default async function BlogPage() {
                       alt={post.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                   </div>
@@ -164,7 +163,7 @@ export default async function BlogPage() {
                     <p className="text-neutral-slate text-xs md:text-sm leading-relaxed line-clamp-3 flex-1">
                       {post.excerpt}
                     </p>
-                    <span className="inline-flex items-center gap-1 mt-3 md:mt-4 text-xs md:text-sm font-medium text-brand-tech group-hover:gap-2 transition-all">
+                    <span className="inline-flex items-center gap-1 mt-3 md:mt-4 text-[13px] md:text-sm font-medium text-brand-tech group-hover:gap-2 transition-all">
                       Read more <ArrowRight size={14} />
                     </span>
                   </div>
@@ -174,7 +173,7 @@ export default async function BlogPage() {
           )}
 
           {/* Newsletter CTA */}
-          <div className="mt-16 bg-brand-deep rounded-2xl p-8 md:p-12 text-center text-white shadow-xl">
+          <div className="mt-12 md:mt-16 bg-brand-deep rounded-2xl p-8 md:p-12 text-center text-white shadow-xl">
             <h3 className="text-2xl md:text-3xl font-bold mb-3">
               Never Miss an Update
             </h3>

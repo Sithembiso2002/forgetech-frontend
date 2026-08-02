@@ -108,7 +108,7 @@ export default function GuidesPage() {
       {/* Guides Grid – premium cards */}
       <section className="py-16 md:py-24 bg-neutral-offwhite">
         <div className="container mx-auto px-4 sm:px-6 lg:px-12">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8">
+          <div className="grid sm:grid-cols-1 lg:grid-cols-3 gap-5 md:gap-8">
             {guides.map((guide) => (
               <motion.div
                 key={guide.id}
