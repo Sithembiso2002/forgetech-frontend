@@ -1,5 +1,4 @@
-﻿// apps/website/src/features/home/Hero.tsx
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -162,16 +161,16 @@ export default function Hero() {
         </div>
 
         {/* Bottom row: Slide cards (left) + Subcaption + Trust points (right) */}
-        <div className="mt-10 md:mt-12 flex flex-col lg:flex-row items-end justify-between gap-6 lg:gap-8">
+        <div className="mt-10 md:mt-12 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6 lg:gap-8">
           {/* Slide indicator cards – bottom LEFT */}
-          <div className="flex items-stretch gap-2 sm:gap-3 md:gap-4 w-full lg:w-auto overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+          <div className="flex items-stretch gap-2 sm:gap-3 md:gap-4 w-full lg:w-auto">
             {slideCards.map((card, index) => {
               const isActive = index === currentSlide;
               return (
                 <motion.button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`relative flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-left transition-all duration-300 snap-center shrink-0 ${
+                  className={`relative flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-left transition-all duration-300 flex-1 min-w-0 lg:flex-initial ${
                     isActive
                       ? "bg-white/10 backdrop-blur-sm border border-brand-gold/30 shadow-lg scale-105"
                       : "bg-white/5 border border-white/10 hover:bg-white/10"
@@ -207,13 +206,13 @@ export default function Hero() {
 
           {/* Right column: Subcaption + Trust indicators */}
           <div className="flex flex-col items-start lg:items-end gap-4 w-full lg:w-auto">
-            {/* Constant subcaption – now above trust indicators */}
-            <p className="text-sm sm:text-base md:text-lg text-white/80 max-w-md text-right">
+            {/* Subcaption – left on mobile, right on desktop */}
+            <p className="text-sm sm:text-base md:text-lg text-white/80 max-w-md text-left lg:text-right">
               {CONSTANT_SUBCAPTION}
             </p>
 
-            {/* Trust indicators – completely static */}
-            <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-white/60">
+            {/* Trust indicators – left aligned on mobile */}
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-white/60 w-full lg:w-auto">
               <span className="flex items-center gap-1.5">
                 <Shield size={18} className="text-brand-gold" />
                 Enterprise‑Grade Security

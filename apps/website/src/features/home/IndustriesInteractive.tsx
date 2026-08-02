@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence, useMotionValue, useAnimationFrame } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useAnimationFrame, animate } from "framer-motion";
 import Image from "next/image";
 import { CheckCircle, ArrowRight } from "lucide-react";
 
@@ -23,15 +23,20 @@ export default function IndustriesInteractive({
   industries: Industry[];
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [lockedIndex, setLockedIndex] = useState<number | null>(null); // NEW
-  const leftTrackRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null); // for outside‑click detection
+  const [lockedIndex, setLockedIndex] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidthPx, setContainerWidthPx] = useState(0);
 
   const [cardWidth, setCardWidth] = useState(220);
   const [gap, setGap] = useState(16);
 
   const [isHovered, setIsHovered] = useState(false);
+
+  // Drag refs
+  const dragStartX = useRef(0);
+  const dragStartMotion = useRef(0);
+  const dragged = useRef(false);
 
   const updateDimensions = useCallback((width: number) => {
     if (width < 640) {
@@ -67,9 +72,9 @@ export default function IndustriesInteractive({
 
   const duplicatedIndustries = [...industries, ...industries];
 
-  // Pause if hovered OR if a card is locked
+  // Animation loop – paused when hovering, locked, or dragging
   useAnimationFrame(() => {
-    if (isHovered || lockedIndex !== null) return;
+    if (isHovered || lockedIndex !== null || isDragging) return;
     let currentX = xMotion.get();
     currentX -= speed;
     if (currentX <= -totalWidth) {
@@ -78,7 +83,7 @@ export default function IndustriesInteractive({
     xMotion.set(currentX);
   });
 
-  // Auto‑detect active index from scroll position (only when not locked)
+  // Active index tracking
   useEffect(() => {
     const updateActiveIndex = () => {
       if (lockedIndex !== null) {
@@ -103,7 +108,7 @@ export default function IndustriesInteractive({
     return () => unsubscribe();
   }, [xMotion, containerWidthPx, industries.length, cardWidth, gap, lockedIndex]);
 
-  // Outside‑click listener: unlock if click is outside the carousel container
+  // Outside click unlocks
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -116,6 +121,62 @@ export default function IndustriesInteractive({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [lockedIndex]);
 
+  // ---------- Drag handlers ----------
+  const handlePointerDown = (e: React.PointerEvent) => {
+    e.preventDefault(); // prevent default to avoid text selection
+    setIsDragging(true);
+    setLockedIndex(null);          // unlock on drag
+    dragStartX.current = e.clientX;
+    dragStartMotion.current = xMotion.get();
+    dragged.current = false;
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging) return;
+    const delta = e.clientX - dragStartX.current;
+    if (Math.abs(delta) > 3) {
+      dragged.current = true;
+    }
+    const newX = dragStartMotion.current + delta;
+    xMotion.set(newX);
+  };
+
+  const handlePointerUp = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+
+    if (dragged.current) {
+      // Snap to nearest card
+      const currentX = xMotion.get();
+      const centerX = containerWidthPx / 2;
+      let closestIndex = 0;
+      let minDist = Infinity;
+      for (let i = 0; i < industries.length; i++) {
+        const cardCenterX = currentX + i * (cardWidth + gap) + cardWidth / 2;
+        const dist = Math.abs(cardCenterX - centerX);
+        if (dist < minDist) {
+          minDist = dist;
+          closestIndex = i;
+        }
+      }
+      const targetX = centerX - (closestIndex * (cardWidth + gap) + cardWidth / 2);
+      animate(xMotion, targetX, { type: "spring", stiffness: 300, damping: 30 });
+    }
+
+    // Reset dragged flag after a tiny delay so the click event can read it
+    setTimeout(() => {
+      dragged.current = false;
+    }, 50);
+  };
+
+  const handleCardClick = (index: number) => {
+    // Ignore click if we just dragged
+    if (dragged.current) return;
+    const realIndex = index % industries.length;
+    setLockedIndex(realIndex);
+    setActiveIndex(realIndex);
+  };
+
   const activeIndustry = industries[activeIndex];
 
   return (
@@ -124,13 +185,19 @@ export default function IndustriesInteractive({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* LEFT COLUMN – Industry Carousel */}
+      {/* LEFT COLUMN – Carousel */}
       <div
         ref={containerRef}
-        className="lg:w-[60%] relative overflow-hidden h-[320px] xs:h-[360px] sm:h-[420px] md:h-[520px] lg:h-[580px] xl:h-[620px] rounded-2xl"
+        className={`lg:w-[60%] relative overflow-hidden h-[320px] xs:h-[360px] sm:h-[420px] md:h-[520px] lg:h-[580px] xl:h-[620px] rounded-2xl select-none ${
+          isDragging ? "cursor-grabbing" : "cursor-grab"
+        }`}
+        style={{ touchAction: "none" }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}   // in case pointer leaves while dragging
       >
         <motion.div
-          ref={leftTrackRef}
           style={{ x: xMotion }}
           className="flex gap-3 sm:gap-4 absolute top-0 left-0 h-full items-center"
         >
@@ -139,13 +206,11 @@ export default function IndustriesInteractive({
             return (
               <motion.div
                 key={`${industry.id}-${index}`}
-                onClick={() => {
-                  const realIndex = index % industries.length;
-                  setLockedIndex(realIndex);
-                  setActiveIndex(realIndex);
-                }}
-                className={`relative flex-shrink-0 w-[180px] sm:w-[200px] lg:w-[220px] h-full rounded-2xl overflow-hidden shadow-lg transition-all duration-300 cursor-pointer ${
-                  isActive ? "scale-105 border-2 border-brand-gold shadow-2xl" : "border border-white/20 opacity-80 hover:opacity-100"
+                onClick={() => handleCardClick(index)}
+                className={`relative flex-shrink-0 w-[180px] sm:w-[200px] lg:w-[220px] h-full rounded-2xl overflow-hidden shadow-lg transition-all duration-300 ${
+                  isActive
+                    ? "scale-105 border-2 border-brand-gold shadow-2xl"
+                    : "border border-white/20 opacity-80 hover:opacity-100"
                 }`}
               >
                 <Image
@@ -166,7 +231,7 @@ export default function IndustriesInteractive({
         </motion.div>
       </div>
 
-      {/* RIGHT COLUMN – Active Industry Details */}
+      {/* RIGHT COLUMN – Details */}
       <div className="lg:w-[40%]">
         <AnimatePresence mode="wait">
           <motion.div
