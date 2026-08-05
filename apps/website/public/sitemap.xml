@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://forgetechnobles.vercel.app/</loc>
+    <loc>https://forgetech-nobles.vercel.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://forgetechnobles.vercel.app/services</loc>
+    <loc>https://forgetech-nobles.vercel.app/services</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://forgetechnobles.vercel.app/about</loc>
+    <loc>https://forgetech-nobles.vercel.app/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://forgetechnobles.vercel.app/case-studies</loc>
+    <loc>https://forgetech-nobles.vercel.app/case-studies</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://forgetechnobles.vercel.app/contact</loc>
+    <loc>https://forgetech-nobles.vercel.app/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -30,18 +30,29 @@
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
-
-    <url>
-    <loc>https://forgetech-nobles.vercel.app/about</loc>
-    </url>
-
-    <url>
-    <loc>https://forgetech-nobles.vercel.app/contacts</loc>
-    </url>
-
-    <url>
-    <loc>https://forgetech-nobles.vercel.app/case-studies</loc>
-    </url>
-
-  <!-- add more pages as needed -->
+  <url>
+    <loc>https://forgetech-nobles.vercel.app/resources/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://forgetech-nobles.vercel.app/resources/news</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://forgetech-nobles.vercel.app/solutions/sme</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://forgetech-nobles.vercel.app/solutions/enterprise</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://forgetech-nobles.vercel.app/solutions/ngo</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
