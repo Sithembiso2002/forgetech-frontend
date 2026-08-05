@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1000";
 
 // ---------- Real social media links (update with your actual URLs) ----------
 const SOCIAL_LINKS = [
@@ -132,7 +132,7 @@ export default function Footer() {
               {[
                 { label: "About Us", href: "/about" },
                 { label: "Services", href: "/services" },
-                { label: "Case Studies", href: "/case-studies" },
+                { label: "Experience", href: "/projects" },
                 { label: "Blog", href: "/resources/blog" },
                 { label: "Careers", href: "/careers" },
                 { label: "Contact", href: "/contact" },

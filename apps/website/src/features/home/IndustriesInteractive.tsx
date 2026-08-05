@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useMotionValue, useAnimationFrame, animate } from "framer-motion";
 import Image from "next/image";
-import { CheckCircle, ArrowRight } from "lucide-react";
+import { CheckCircle, ArrowRight, ArrowUpRight } from "lucide-react";
 
 interface Industry {
   id: string;
@@ -270,7 +270,9 @@ export default function IndustriesInteractive({
               className="inline-flex items-center gap-2 rounded-full bg-brand-gold px-5 sm:px-6 py-2.5 sm:py-3 text-sm font-bold text-brand-navy shadow-lg transition-all duration-300 hover:bg-brand-orange hover:shadow-xl hover:scale-105"
             >
               {activeIndustry.cta}
-              <ArrowRight size={16} />
+                                  <span className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[#0B1F3A] text-white shadow-md">
+                      <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
+                    </span>
             </a>
           </motion.div>
         </AnimatePresence>

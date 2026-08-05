@@ -4,7 +4,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, ArrowUpRight } from "lucide-react";
 
 const solutions = [
   {
@@ -150,7 +150,9 @@ export default function SolutionCardsSection() {
                   className="inline-flex items-center justify-center gap-1.5 rounded-full bg-brand-gold text-brand-navy px-4 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-xs lg:text-sm font-bold hover:bg-amber-400 transition-colors shadow-md group/btn"
                 >
                   <span>{solution.cta}</span>
-                  <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                                      <span className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[#0B1F3A] text-white shadow-md">
+                      <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
+                    </span>
                 </Link>
               </div>
             </motion.div>

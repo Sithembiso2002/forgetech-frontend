@@ -4,7 +4,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 const ads = [
   {
@@ -151,7 +151,9 @@ export default function ServicesAdSlider() {
                     className="group inline-flex items-center gap-2 rounded-full bg-brand-gold text-brand-navy px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-bold hover:bg-amber-400 hover:shadow-[0_0_25px_rgba(245,177,26,0.6)] transition-all duration-300 active:scale-95 focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2"
                   >
                     Consult for Free
-                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                        <span className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[#0B1F3A] text-white shadow-md">
+                      <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
+                    </span>
                   </Link>
                 </motion.div>
               </div>
@@ -160,30 +162,7 @@ export default function ServicesAdSlider() {
         </div>
 
         {/* Dot indicators */}
-        <div className="flex justify-center gap-3 mt-8" role="tablist" aria-label="Slide selector">
-          {ads.map((ad, index) => (
-            <button
-              key={ad.id}
-              onClick={() => goToSlide(index)}
-              role="tab"
-              aria-selected={index === current}
-              aria-label={`Go to slide ${index + 1}: ${ad.tagline}`}
-              className={`relative w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-deep focus:ring-offset-2 ${
-                index === current
-                  ? "bg-brand-deep scale-110"
-                  : "bg-neutral-border hover:bg-brand-tech/50 hover:scale-110"
-              }`}
-            >
-              {index === current && (
-                <motion.span
-                  layoutId="activeDot"
-                  className="absolute inset-0 rounded-full bg-brand-deep"
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                />
-              )}
-            </button>
-          ))}
-        </div>
+
       </div>
     </section>
   );

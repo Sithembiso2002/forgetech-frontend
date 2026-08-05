@@ -69,7 +69,7 @@ export default async function CaseStudiesSection() {
             Our Work
           </span>
           <h2 className="mt-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-brand-deep leading-tight">
-            Case Studies
+            Experience
           </h2>
           <p className="mt-4 text-base md:text-lg text-neutral-slate max-w-2xl mx-auto">
             Real projects we’ve delivered for clients across Lesotho and beyond.
@@ -81,7 +81,7 @@ export default async function CaseStudiesSection() {
           {displayedProjects.map((project: any) => (
             <Link
               key={project.id}
-              href={`/case-studies/${project.slug}`}
+              href={`/projects/${project.slug}`}
               className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-neutral-border/30 flex flex-col"
             >
               {/* Image */}
@@ -133,7 +133,7 @@ export default async function CaseStudiesSection() {
                 )}
 
                 <span className="mt-4 inline-flex items-center gap-1 text-xs md:text-sm font-semibold text-brand-tech group-hover:underline">
-                  View full case study <ArrowRight size={14} />
+                  VIEW PROJECT <ArrowRight size={14} />
                 </span>
               </div>
             </Link>
@@ -143,10 +143,10 @@ export default async function CaseStudiesSection() {
         {/* View All Link – premium upgrade */}
         <div className="mt-12 md:mt-16 text-center">
           <Link
-            href="/case-studies"
+            href="/projects"
             className="group inline-flex items-center gap-3 rounded-full bg-brand-gold px-8 py-4 text-sm font-bold text-brand-navy shadow-xl shadow-brand-gold/20 transition-all duration-300 hover:shadow-2xl hover:shadow-brand-gold/30 hover:scale-105 active:scale-100"
           >
-            <span>View All Case Studies</span>
+            <span>View All Projects</span>
             <span className="flex items-center justify-center w-8 h-8 rounded-full bg-brand-navy text-white transition-transform duration-300 group-hover:translate-x-1">
               <ArrowRight size={18} />
             </span>

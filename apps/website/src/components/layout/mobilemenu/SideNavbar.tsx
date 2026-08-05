@@ -117,7 +117,7 @@ const mainNavLinks: NavItem[] = [
       { label: "NGOs", href: "/solutions/ngo", icon: Users },
     ],
   },
-  { label: "Case Studies", href: "/case-studies", icon: FolderOpen, description: "Our success stories" },
+  { label: "Experience", href: "/Projects", icon: FolderOpen, description: "Our success stories" },
   {
     label: "Resources",
     href: "/resources/blog",

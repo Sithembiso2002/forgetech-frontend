@@ -80,7 +80,7 @@ export default function GuidesPage() {
   return (
     <>
       {/* Hero – enhanced with subtle animation */}
-      <section className="relative bg-brand-navy text-white py-20 md:py-28 overflow-hidden">
+      <section className="relative bg-white text-brand-navy py-20 md:py-28 overflow-hidden">
         <div className="absolute top-20 left-1/4 w-[400px] h-[400px] bg-brand-tech/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-20 right-1/4 w-[300px] h-[300px] bg-brand-gold/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20" />
@@ -97,7 +97,7 @@ export default function GuidesPage() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-3 md:mb-4 leading-tight">
               Technology Guides for Your Business
             </h1>
-            <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-brand-deeper-200 max-w-2xl mx-auto">
               Clear, actionable guides designed specifically for service‑based
               SMEs, professional firms, and educational institutions in Lesotho.
             </p>

@@ -65,12 +65,12 @@ let news;
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-brand-deep text-white py-14 md:py-24">
+      <section className="bg-white text-brand-deep py-14 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-3 md:mb-4">
             News & Insights
           </h1>
-          <p className="text-base md:text-lg text-neutral-200 max-w-3xl mx-auto">
+          <p className="text-base md:text-lg text-brand-deeper-200 max-w-3xl mx-auto">
             Stay informed about our latest events, community impact, and
             industry thought leadership.
           </p>

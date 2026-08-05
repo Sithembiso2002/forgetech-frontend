@@ -99,7 +99,7 @@ export default function IndustriesPage() {
   return (
     <>
       {/* ── Hero ── */}
-      <section className="relative bg-brand-navy text-white py-20 md:py-28 overflow-hidden">
+      <section className="relative bg-white text-brand-navy py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20" />
         <div className="relative container mx-auto px-6 text-center">
           <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold bg-brand-tech/20 text-brand-tech border border-brand-tech/30 rounded-full">
@@ -108,7 +108,7 @@ export default function IndustriesPage() {
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6">
             Industries We Serve
           </h1>
-          <p className="text-lg text-neutral-200 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg text-brand-deeper-200 max-w-3xl mx-auto leading-relaxed">
             From professional services to retail, healthcare, education, government,
             and more — we deliver tailored technology solutions that address the
             unique challenges of each sector.

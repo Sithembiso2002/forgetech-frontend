@@ -184,10 +184,11 @@ export default function ServicesInteractive({
                       className="inline-flex items-center gap-2 rounded-full bg-[#F5A623] text-[#0B1F3A] px-5 md:px-6 py-2.5 md:py-3 text-sm font-bold hover:bg-amber-400 transition-colors shadow-md"
                     >
                       {activeService.cta || "Learn More"}
-                    </a>
                     <span className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[#0B1F3A] text-white shadow-md">
                       <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
                     </span>
+                    </a>
+
                   </div>
                 </div>
               </div>
@@ -200,11 +201,13 @@ export default function ServicesInteractive({
       <div className="mt-8 md:mt-10 flex justify-center">
         <Link
           href="/services"
-          className="group inline-flex items-center gap-3 rounded-full bg-[#F5A623] text-[#0B1F3A] px-6 md:px-8 py-3 md:py-3.5 text-sm font-bold shadow-md hover:bg-amber-400 transition-colors overflow-hidden"
+          className="group inline-flex items-center gap-3 rounded-full bg-[#0B1F3A] text-[#F5A623] px-6 md:px-8 py-3 md:py-3.5 text-sm font-bold shadow-md hover:bg-amber-400 transition-colors overflow-hidden"
         >
           <span>All Services</span>
           <span className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-lg bg-[#0B1F3A] text-white transition-transform duration-300 group-hover:translate-x-1">
-            <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+                    <span className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[#F5A623] text-white shadow-md">
+                      <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
+                    </span>
           </span>
         </Link>
       </div>
