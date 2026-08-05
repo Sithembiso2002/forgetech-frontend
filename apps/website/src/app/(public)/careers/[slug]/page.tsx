@@ -5,7 +5,7 @@ import Button from "@/components/ui/Button";
 import { MapPin, Briefcase, Clock, ArrowRight } from "lucide-react";
 
 // ---------------------------------------------
-// generateStaticParams – required for static export
+// REQUIRED for static export: generateStaticParams
 // ---------------------------------------------
 export async function generateStaticParams() {
   try {
@@ -16,14 +16,15 @@ export async function generateStaticParams() {
         .map((v: any) => ({ slug: v.slug }));
     }
   } catch (error) {
-    // If API is unreachable, no career detail pages will be pre‑rendered.
-    // The listing page will still work with its own fallback logic.
+    // If the API is down, no career detail pages will be pre‑rendered.
+    // The careers listing page will still work with its own logic.
   }
+  // Return an empty array so that the build doesn't fail – just no static pages
   return [];
 }
 
 // ---------------------------------------------
-// Page component – no fallback data
+// Page component – fully dynamic, no fallback
 // ---------------------------------------------
 export default async function CareerDetailPage({
   params,
@@ -36,7 +37,7 @@ export default async function CareerDetailPage({
   try {
     vacancy = await getVacancyBySlug(slug);
   } catch {
-    // if error, vacancy remains null → 404
+    // if error, vacancy remains null → notFound()
   }
 
   if (!vacancy) notFound();
