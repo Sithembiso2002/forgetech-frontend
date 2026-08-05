@@ -54,9 +54,9 @@ export default function ServicesPageClient({
   return (
     <>
       {/* ── Hero ── */}
-      <section className="relative bg-gradient-to-br from-[#0B1F3A] via-[#122d5e] to-[#0B1F3A] text-white py-16 md:py-28 overflow-hidden">
-        <div className="absolute top-20 left-1/4 w-[300px] md:w-[400px] h-[300px] md:h-[400px] bg-brand-tech/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-1/4 w-[200px] md:w-[300px] h-[200px] md:h-[300px] bg-brand-gold/10 rounded-full blur-3xl animate-pulse" />
+      <section className="relative bg-gradient-to-br from-[#0B1F3A] via-[#122d5e] to-[#0B1F3A] text-white py-12 md:py-28 overflow-hidden">
+        <div className="absolute top-10 left-1/4 w-[150px] h-[150px] md:w-[400px] md:h-[400px] bg-brand-tech/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-10 right-1/4 w-[120px] h-[120px] md:w-[300px] md:h-[300px] bg-brand-gold/10 rounded-full blur-3xl animate-pulse" />
         <div className="container mx-auto px-4 sm:px-6 text-center relative z-10">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
@@ -97,7 +97,7 @@ export default function ServicesPageClient({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="mb-20 md:mb-32 last:mb-0"
+              className="mb-16 md:mb-32 last:mb-0"
             >
               {/* Main Service Row */}
               <div className="flex flex-col lg:flex-row gap-8 md:gap-16 items-center">
@@ -168,13 +168,13 @@ export default function ServicesPageClient({
                 </div>
               </div>
 
-              {/* Sub‑services Grid – always 2 columns */}
+              {/* Sub‑services Grid – one column on mobile, two on small screens */}
               {service.subServices && service.subServices.length > 0 && (
-                <div className="mt-16 md:mt-20">
-                  <h3 className="text-xl md:text-3xl font-extrabold text-brand-deep mb-8 md:mb-10 text-center">
+                <div className="mt-12 md:mt-20">
+                  <h3 className="text-xl md:text-3xl font-extrabold text-brand-deep mb-6 md:mb-10 text-center">
                     What’s Included
                   </h3>
-                  <div className="grid grid-cols-1 gap-4 md:gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
                     {service.subServices.map((sub: any, idx: number) => (
                       <motion.div
                         key={idx}
@@ -199,13 +199,13 @@ export default function ServicesPageClient({
                 </div>
               )}
 
-              {/* Features – always 2 columns on mobile */}
+              {/* Features – fully responsive grid */}
               {service.features && service.features.length > 0 && (
                 <div className="mt-12 md:mt-16">
                   <h3 className="text-xl md:text-2xl font-extrabold text-brand-deep mb-6 md:mb-8 text-center">
                     Core Features
                   </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 max-w-5xl mx-auto">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 max-w-5xl mx-auto">
                     {service.features.map((feat: string) => (
                       <div
                         key={feat}

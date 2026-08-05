@@ -1,142 +1,106 @@
 // apps/website/src/app/(public)/resources/news/[slug]/page.tsx
-import { getNewsBySlug } from "@/lib/api";
+import { getNewsBySlug, getNews } from "@/lib/api";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 
-// Known slugs for static generation – add more as you publish news articles
-const newsSlugs = [
-  "sponsors-tech-expo-2026",
-  "cybersecurity-workshop-smes",
-  "digital-schools-initiative",
+// Known slugs (used if API is unreachable)
+const knownSlugs = [
+  "forgetech-nobles-launches-official-corporate-website-for-digital-transformation-services-in-lesotho",
+  "forgetech-nobles-unveils-new-corporate-brand-identity-and-professional-business-profile",
+  "forgetech-nobles-expands-digital-transformation-and-enterprise-technology-service-portfolio",
+  "forgetech-nobles-introduces-strategic-technology-partnership-model-for-enterprise-project-delivery",
+  "forgetech-nobles-strengthens-commitment-to-support-small-and-medium-enterprises-through-digital-innovation",
+  "forgetech-nobles-announces-mission-to-accelerate-digital-transformation-and-business-innovation-in-lesotho",
 ];
 
+// Required for static export
 export async function generateStaticParams() {
-  return newsSlugs.map((slug) => ({ slug }));
+  try {
+    const newsList = await getNews();
+    if (newsList && newsList.length > 0) {
+      return newsList.map((item: any) => ({ slug: item.slug }));
+    }
+  } catch (error) {
+    // ignore – will fall back to known slugs
+  }
+  return knownSlugs.map((slug) => ({ slug }));
 }
 
-// Rich fallback with full article content and images
+// Updated fallback articles – your six latest news items
 const fallbackArticles: Record<string, any> = {
-  "sponsors-tech-expo-2026": {
-    id: "1",
-    title: "ForgeTech Nobles Sponsors Lesotho Tech Expo 2026",
-    slug: "sponsors-tech-expo-2026",
+  "forgetech-nobles-launches-official-corporate-website-for-digital-transformation-services-in-lesotho": {
+    id: "news-001",
+    title: "ForgeTech Nobles Officially Launches Its Corporate Website",
+    slug: "forgetech-nobles-launches-official-corporate-website-for-digital-transformation-services-in-lesotho",
     summary:
-      "We were proud to be a platinum sponsor at this year's largest technology exhibition, showcasing our latest digital transformation solutions to over 2,000 attendees.",
-    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=600&fit=crop",
-    date: "15 June 2026",
-    readingTime: "4 min read",
-    content: `
-      <p>The 2026 Lesotho Tech Expo was a landmark event for the country's growing technology sector. Held at the Maseru Convention Centre from 12–14 June, the expo attracted over 2,000 attendees, 50 exhibitors, and speakers from across Africa.</p>
-      
-      <p>As a platinum sponsor, ForgeTech Nobles played a central role in shaping the conversation around digital transformation in Lesotho. Our booth, located in the main hall, featured live demonstrations of our latest solutions:</p>
-      
-      <ul>
-        <li><strong>Smart SME Dashboard</strong> – a real-time business intelligence platform for small businesses</li>
-        <li><strong>Secure Cloud Migration Toolkit</strong> – showing how we migrate legacy systems to the cloud with zero downtime</li>
-        <li><strong>AI Chatbot for Customer Support</strong> – an interactive demo that answered attendees' questions about our services</li>
-      </ul>
-      
-      <figure>
-        <img src="https://images.unsplash.com/photo-1540317580384-e5d438967f90?w=800&h=400&fit=crop" alt="ForgeTech booth at Tech Expo" />
-        <figcaption>Our team engaging with visitors at the ForgeTech booth</figcaption>
-      </figure>
-      
-      <p>Our CEO, Ms. Mpho Tau, delivered a keynote address titled <em>"Bridging the Digital Divide: A Lesotho Perspective"</em>, where she highlighted the 72% security awareness gap and announced our new free cybersecurity workshop initiative for SMEs.</p>
-      
-      <blockquote>
-        "Technology is not just for the big players. It's for every entrepreneur, every school, every hospital. Our mission is to make world-class digital solutions accessible to all Basotho." – Ms. Mpho Tau, CEO
-      </blockquote>
-      
-      <p>The expo also provided a platform for networking with government officials, potential clients, and fellow tech innovators. We are already in discussions with several organisations for pilot projects in education and healthcare.</p>
-      
-      <figure>
-        <img src="https://images.unsplash.com/photo-1559223607-a43c990c692c?w=800&h=400&fit=crop" alt="Keynote speech" />
-        <figcaption>CEO delivering the keynote on digital inclusion</figcaption>
-      </figure>
-      
-      <p>We extend our gratitude to the event organisers and everyone who visited our booth. Stay tuned for more updates on the partnerships and projects that emerged from this event.</p>
-    `,
+      "ForgeTech Nobles has officially launched its corporate website to showcase its technology services, portfolio, and digital transformation solutions.",
+    image:
+      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1600&q=80&auto=format&fit=crop",
+    date: "2026-07-30",
+    readingTime: "4 min",
+    content: `<p>ForgeTech Nobles is proud to announce the official launch of its corporate website. The new platform has been developed to provide businesses across Lesotho with easy access to the company's comprehensive technology services, including custom software development, web development, cloud solutions, IT infrastructure, networking, business intelligence, and digital transformation consulting. The website also features the company portfolio, service packages, industry expertise, company news, and direct communication channels, reflecting ForgeTech Nobles' commitment to delivering modern, reliable, and scalable technology solutions.</p>`,
   },
-  "cybersecurity-workshop-smes": {
-    id: "2",
-    title: "Empowering Local SMEs with Free Cybersecurity Workshop",
-    slug: "cybersecurity-workshop-smes",
+  "forgetech-nobles-unveils-new-corporate-brand-identity-and-professional-business-profile": {
+    id: "news-002",
+    title: "ForgeTech Nobles Unveils New Corporate Identity and Brand Strategy",
+    slug: "forgetech-nobles-unveils-new-corporate-brand-identity-and-professional-business-profile",
     summary:
-      "Our team conducted a hands-on cybersecurity awareness workshop for 50 small business owners in Maseru, addressing the 72% security awareness gap identified in recent studies.",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=600&fit=crop",
-    date: "28 May 2026",
-    readingTime: "3 min read",
-    content: `
-      <p>On 25 May 2026, ForgeTech Nobles hosted a free cybersecurity awareness workshop at the Maseru Business Hub. The event attracted 50 small business owners from various sectors including retail, hospitality, and professional services.</p>
-      
-      <p>The workshop was designed to address the findings of the Mayet & Associates 2025 report, which revealed that <strong>72% of citizens lacked basic security awareness</strong>, leaving them vulnerable to scams and cyber attacks.</p>
-      
-      <figure>
-        <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&h=400&fit=crop" alt="Workshop participants" />
-        <figcaption>Small business owners learning about password hygiene</figcaption>
-      </figure>
-      
-      <p>Topics covered included:</p>
-      <ul>
-        <li>Recognising phishing emails and smishing (SMS phishing)</li>
-        <li>Creating strong passwords and using password managers</li>
-        <li>Securing business Wi-Fi networks</li>
-        <li>Backing up data and creating disaster recovery plans</li>
-        <li>Introduction to multi-factor authentication (MFA)</li>
-      </ul>
-      
-      <p>Each participant received a free security assessment checklist and a one-month trial of our basic IT support package. The feedback was overwhelmingly positive, with 92% of attendees rating the workshop "very useful" or "extremely useful".</p>
-      
-      <figure>
-        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&h=400&fit=crop" alt="Security checklist" />
-        <figcaption>Participants received practical take-home materials</figcaption>
-      </figure>
-      
-      <p>We plan to run these workshops quarterly as part of our corporate social responsibility programme. If you'd like to attend the next one, please <a href="/contact">contact us</a> to register your interest.</p>
-    `,
+      "ForgeTech Nobles introduces its refined corporate identity, including a modern logo, business profile, and marketing assets.",
+    image:
+      "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1600&q=80&auto=format&fit=crop",
+    date: "2026-07-31",
+    readingTime: "3 min",
+    content: `<p>As part of its long-term growth strategy, ForgeTech Nobles has completed a comprehensive corporate branding initiative. The project included the redesign of the company's visual identity, development of a professional company profile, marketing brochures, presentation materials, and a modern digital brand that reflects its enterprise-focused approach. The refreshed identity strengthens the company's positioning as a trusted technology partner for businesses seeking innovative and integrated IT solutions.</p>`,
   },
-  "digital-schools-initiative": {
-    id: "3",
-    title: "ForgeTech Nobles Partners with Ministry of Education for Digital Schools Initiative",
-    slug: "digital-schools-initiative",
+  "forgetech-nobles-expands-digital-transformation-and-enterprise-technology-service-portfolio": {
+    id: "news-003",
+    title: "ForgeTech Nobles Expands Technology Services to Support Business Growth",
+    slug: "forgetech-nobles-expands-digital-transformation-and-enterprise-technology-service-portfolio",
     summary:
-      "We have been selected to provide cloud infrastructure and custom school management software to 30 public schools across Lesotho, supporting the National Digital Transformation Strategy.",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&h=600&fit=crop",
-    date: "10 April 2026",
-    readingTime: "5 min read",
-    content: `
-      <p>In a landmark partnership announced on 8 April 2026, ForgeTech Nobles has been selected by the Ministry of Education and Training to implement a comprehensive digital infrastructure programme in 30 public schools across Lesotho.</p>
-      
-      <p>The initiative is part of the government's National Digital Transformation Strategy, launched in June 2025, which aims to modernise the education sector through technology.</p>
-      
-      <figure>
-        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&h=400&fit=crop" alt="School classroom" />
-        <figcaption>Our team visiting a pilot school in Maseru</figcaption>
-      </figure>
-      
-      <h3>What the Programme Includes</h3>
-      <ul>
-        <li><strong>Cloud Infrastructure:</strong> Each school will receive a secure cloud environment for student records, timetabling, and communication.</li>
-        <li><strong>Custom School Management Software:</strong> A bespoke platform that handles admissions, attendance, grade reporting, and parent communication.</li>
-        <li><strong>Teacher Training:</strong> We will train 200 teachers in basic digital literacy and the use of the new systems.</li>
-        <li><strong>Ongoing Support:</strong> Our IT support team will provide helpdesk services and quarterly maintenance visits.</li>
-      </ul>
-      
-      <figure>
-        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&h=400&fit=crop" alt="Digital classroom" />
-        <figcaption>Teachers exploring the new digital tools</figcaption>
-      </figure>
-      
-      <p>The rollout will happen in three phases, with the first 10 schools going live by September 2026. The remaining 20 will follow by March 2027.</p>
-      
-      <blockquote>
-        "Education is the cornerstone of national development. By bringing modern technology to our schools, we are investing in the future of Lesotho." – Honourable Minister of Education
-      </blockquote>
-      
-      <p>We are honoured to be part of this transformative journey and look forward to sharing progress updates as the project unfolds.</p>
-    `,
+      "The company has expanded its technology portfolio to provide businesses with more integrated digital solutions.",
+    image:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1600&q=80&auto=format&fit=crop",
+    date: "2026-08-01",
+    readingTime: "5 min",
+    content: `<p>ForgeTech Nobles continues to strengthen its service offering by expanding its portfolio to include enterprise-grade software development, responsive web applications, IT infrastructure, networking, cloud technologies, managed IT support, business intelligence, and digital transformation consulting. The expanded portfolio enables organizations to work with a single technology partner capable of delivering end-to-end digital solutions that improve operational efficiency, security, and long-term scalability.</p>`,
+  },
+  "forgetech-nobles-introduces-strategic-technology-partnership-model-for-enterprise-project-delivery": {
+    id: "news-004",
+    title: "ForgeTech Nobles Introduces Strategic Partnership Delivery Model",
+    slug: "forgetech-nobles-introduces-strategic-technology-partnership-model-for-enterprise-project-delivery",
+    summary:
+      "ForgeTech Nobles adopts a partnership-driven model to deliver specialized technology solutions for clients.",
+    image:
+      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1600&q=80&auto=format&fit=crop",
+    date: "2026-08-03",
+    readingTime: "4 min",
+    content: `<p>ForgeTech Nobles has introduced a strategic partnership model that enables the company to collaborate with trusted technology specialists and industry experts when delivering large-scale or highly specialized projects. This approach ensures that clients receive enterprise-quality solutions while benefiting from a single point of coordination. Through carefully selected partnerships, ForgeTech Nobles continues to strengthen its ability to deliver reliable, scalable, and innovative technology services across multiple industries.</p>`,
+  },
+  "forgetech-nobles-strengthens-commitment-to-support-small-and-medium-enterprises-through-digital-innovation": {
+    id: "news-005",
+    title: "ForgeTech Nobles Strengthens Commitment to Small and Medium-Sized Businesses in Lesotho",
+    slug: "forgetech-nobles-strengthens-commitment-to-support-small-and-medium-enterprises-through-digital-innovation",
+    summary:
+      "ForgeTech Nobles continues to invest in affordable digital transformation services designed specifically for SMEs across Lesotho.",
+    image:
+      "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=1600&q=80&auto=format&fit=crop",
+    date: "2026-08-05",
+    readingTime: "4 min",
+    content: `<p>ForgeTech Nobles remains committed to helping small and medium-sized enterprises embrace digital transformation through practical, affordable, and scalable technology solutions. By combining software engineering, IT infrastructure, networking, cloud technologies, business intelligence, and ongoing technical support, the company aims to help local businesses improve productivity, enhance customer experiences, and compete effectively in an increasingly digital economy.</p>`,
+  },
+  "forgetech-nobles-announces-mission-to-accelerate-digital-transformation-and-business-innovation-in-lesotho": {
+    id: "news-006",
+    title: "ForgeTech Nobles Announces Mission to Accelerate Digital Transformation Across Lesotho",
+    slug: "forgetech-nobles-announces-mission-to-accelerate-digital-transformation-and-business-innovation-in-lesotho",
+    summary:
+      "ForgeTech Nobles reaffirms its mission of helping organizations modernize through innovative technology solutions.",
+    image:
+      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600&q=80&auto=format&fit=crop",
+    date: "2026-08-08",
+    readingTime: "5 min",
+    content: `<p>ForgeTech Nobles has reaffirmed its commitment to supporting digital transformation across Lesotho by delivering integrated technology services that empower organizations to grow sustainably. Through innovation, strategic partnerships, and customer-focused service delivery, the company continues to position itself as a trusted technology partner capable of helping businesses modernize their operations, strengthen cybersecurity, improve decision-making through data, and build resilient digital infrastructure.</p>`,
   },
 };
 

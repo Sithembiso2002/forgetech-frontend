@@ -46,7 +46,7 @@ const mainNavLinks = [
       { label: "NGOs & Government", href: "/solutions/ngo", icon: Globe },
     ],
   },
-  { label: "Case Studies", href: "/case-studies" },
+  { label: "Experience", href: "/projects" },
   {
     label: "Resources",
     href: "/resources/blog",

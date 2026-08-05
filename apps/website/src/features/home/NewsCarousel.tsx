@@ -22,6 +22,22 @@ export default function NewsCarousel({ news }: { news: NewsItem[] }) {
   const [isHovered, setIsHovered] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  // ---- Screen‑width dependent side‑offset (no more invalid md: keys) ----
+  const [sideOffset, setSideOffset] = useState(60);
+
+  const updateOffset = () => {
+    const w = window.innerWidth;
+    if (w >= 1024) setSideOffset(130);
+    else if (w >= 768) setSideOffset(100);
+    else setSideOffset(60);
+  };
+
+  useEffect(() => {
+    updateOffset();
+    window.addEventListener("resize", updateOffset);
+    return () => window.removeEventListener("resize", updateOffset);
+  }, []);
+
   const total = Array.isArray(news) ? news.length : 0;
   if (total === 0) return null;
 
@@ -57,6 +73,14 @@ export default function NewsCarousel({ news }: { news: NewsItem[] }) {
 
   const prevIndex = wrapIndex(current - 1);
   const nextIndex = wrapIndex(current + 1);
+
+  // Helper: returns the animate object for a side card (prev = -1, next = +1)
+  const sideCardAnimate = (sign: -1 | 1) => ({
+    x: sign * sideOffset,
+    opacity: 0.6,
+    scale: 0.88,
+    rotateY: sign * 10,
+  });
 
   return (
     <section className="py-16 md:py-28 bg-gradient-to-b from-white to-neutral-offwhite/50 overflow-hidden">
@@ -105,7 +129,7 @@ export default function NewsCarousel({ news }: { news: NewsItem[] }) {
                 key={`prev-${news[prevIndex].id}`}
                 custom={direction}
                 initial={{ x: -220, opacity: 0, scale: 0.82, rotateY: 15 }}
-                animate={{ x: -60, opacity: 0.6, scale: 0.88, rotateY: 10, md: { x: -130, scale: 0.88, rotateY: 10 } } as any}
+                animate={sideCardAnimate(-1)}
                 exit={{ x: -220, opacity: 0, scale: 0.82, rotateY: 15 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 className="absolute left-0 w-[60%] md:w-[50%] h-[85%] cursor-pointer z-0"
@@ -118,9 +142,19 @@ export default function NewsCarousel({ news }: { news: NewsItem[] }) {
               <motion.div
                 key={`current-${news[current].id}`}
                 custom={direction}
-                initial={{ x: direction > 0 ? 350 : -350, opacity: 0, scale: 0.9, rotateY: direction > 0 ? -15 : 15 }}
+                initial={{
+                  x: direction > 0 ? 350 : -350,
+                  opacity: 0,
+                  scale: 0.9,
+                  rotateY: direction > 0 ? -15 : 15,
+                }}
                 animate={{ x: 0, opacity: 1, scale: 1, rotateY: 0 }}
-                exit={{ x: direction > 0 ? -350 : 350, opacity: 0, scale: 0.9, rotateY: direction > 0 ? 15 : -15 }}
+                exit={{
+                  x: direction > 0 ? -350 : 350,
+                  opacity: 0,
+                  scale: 0.9,
+                  rotateY: direction > 0 ? 15 : -15,
+                }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 className="absolute z-10 w-[90%] md:w-[70%] h-full shadow-2xl rounded-3xl overflow-hidden"
               >
@@ -138,7 +172,7 @@ export default function NewsCarousel({ news }: { news: NewsItem[] }) {
                 key={`next-${news[nextIndex].id}`}
                 custom={direction}
                 initial={{ x: 220, opacity: 0, scale: 0.82, rotateY: -15 }}
-                animate={{ x: 60, opacity: 0.6, scale: 0.88, rotateY: -10, md: { x: 130, scale: 0.88, rotateY: -10 } } as any}
+                animate={sideCardAnimate(1)}
                 exit={{ x: 220, opacity: 0, scale: 0.82, rotateY: -15 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 className="absolute right-0 w-[60%] md:w-[50%] h-[85%] cursor-pointer z-0"
