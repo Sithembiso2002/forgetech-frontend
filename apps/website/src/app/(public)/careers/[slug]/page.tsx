@@ -17,9 +17,7 @@ export async function generateStaticParams() {
     }
   } catch (error) {
     // If the API is down, no career detail pages will be pre‑rendered.
-    // The careers listing page will still work with its own logic.
   }
-  // Return an empty array so that the build doesn't fail – just no static pages
   return [];
 }
 
