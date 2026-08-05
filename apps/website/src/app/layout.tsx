@@ -23,17 +23,21 @@ export const metadata: Metadata = {
     title: "ForgeTech Nobles – Integrated Digital Solutions",
     description:
       "Smart Systems. Real Results. Full‑stack technology partner based in Maseru, Lesotho.",
-    url: "https://forgetechnobles.com",
+    url: "https://forgetechnobles.vercel.app",
     siteName: "ForgeTech Nobles",
     images: [
       {
-        url: "https://forgetechnobles.com/og-image.jpg",
+        url: "https://forgetechnobles.vercel.app/og-image.jpg",
         width: 1200,
         height: 630,
       },
     ],
     locale: "en_LS",
     type: "website",
+  },
+
+  verification: {
+    google: "TTsIfO7JJMeY8_iuP3ePaCUUKN--3Jwu6ABpLKekBQQ",
   },
 };
 
@@ -60,7 +64,7 @@ export default function RootLayout({
               name: "ForgeTech Nobles",
               description:
                 "Full‑stack technology partner based in Maseru, Lesotho, offering IT infrastructure, custom software, cloud solutions, data analytics, IT support, and digital consulting.",
-              url: "https://forgetechnobles.com",
+              url: "https://forgetechnobles.vercel.app",
               telephone: "+266 6301 3383",
               address: {
                 "@type": "PostalAddress",
@@ -70,7 +74,7 @@ export default function RootLayout({
                 addressCountry: "LS",
               },
               openingHours: "Mo-Fr 08:00-17:00",
-              areaServed: "Lesotho",
+              areaServed: "Maseru,100,Lesotho",
               hasOfferCatalog: {
                 "@type": "OfferCatalog",
                 name: "Technology Services",
