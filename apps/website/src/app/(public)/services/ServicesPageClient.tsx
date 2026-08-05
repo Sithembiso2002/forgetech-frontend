@@ -54,7 +54,7 @@ export default function ServicesPageClient({
   return (
     <>
       {/* ── Hero ── */}
-      <section className="relative bg-gradient-to-br from-[#0B1F3A] via-[#122d5e] to-[#0B1F3A] text-white py-12 md:py-28 overflow-hidden">
+      <section className="relative bg-white text-brand-navy py-12 md:py-28 overflow-hidden">
         <div className="absolute top-10 left-1/4 w-[150px] h-[150px] md:w-[400px] md:h-[400px] bg-brand-tech/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-10 right-1/4 w-[120px] h-[120px] md:w-[300px] md:h-[300px] bg-brand-gold/10 rounded-full blur-3xl animate-pulse" />
         <div className="container mx-auto px-4 sm:px-6 text-center relative z-10">
@@ -79,7 +79,7 @@ export default function ServicesPageClient({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-base md:text-xl text-white/70 max-w-3xl mx-auto"
+            className="text-base md:text-xl text-brand-deeper-200 max-w-3xl mx-auto"
           >
             End‑to‑end technology solutions engineered for your business.
             Everything you need, under one roof.
