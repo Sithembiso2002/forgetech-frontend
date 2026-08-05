@@ -143,8 +143,8 @@ export default async function ServiceDetailPage({
               title="What’s Included"
               subtitle="Everything you need, delivered by our expert team."
             />
-            {/* Sub‑services grid – always 2 columns */}
-            <div className="grid grid-cols-2 gap-4 md:gap-8 mt-10 md:mt-12">
+            {/* Sub‑services grid – responsive: 1 column on mobile, 2 from small breakpoint */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 mt-10 md:mt-12">
               {service.subServices.map((sub: any, idx: number) => (
                 <div
                   key={idx}
