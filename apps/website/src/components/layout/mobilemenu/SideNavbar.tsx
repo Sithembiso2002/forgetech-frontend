@@ -226,7 +226,7 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
                       ForgeTech<span className="text-[#F5B11A]">Nobles</span>
                     </span>
                     <span className="text-[8px] sm:text-[10px] uppercase tracking-[0.2em] text-gray-500">
-                      Smart Systems. Real Results.
+                      Smart Solutions. Real Results.
                     </span>
                   </div>
                 </Link>

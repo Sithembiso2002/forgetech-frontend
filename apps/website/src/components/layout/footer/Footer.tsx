@@ -104,13 +104,13 @@ export default function Footer() {
                   <span className="text-white">ForgeTech</span>
                   <span className="text-brand-gold">Nobles</span>
                 </h1>
-                <span className="hidden sm:inline text-[8px] sm:text-[9px] uppercase tracking-[0.2em] font-medium text-white/80 whitespace-nowrap">
-                  Smart Systems. Real Results.
+                <span className="hidden sm:inline text-[5px] sm:text-[6px] uppercase tracking-[0.2em] font-medium text-white/80 whitespace-nowrap">
+                  Smart Solutions. Real Results.
                 </span>
               </div>
             </Link>
             <p className="text-neutral-300 text-xs sm:text-sm leading-relaxed max-w-sm">
-              Engineering smart systems that create real business results.
+              Engineering smart solutions that create real business results.
               Lesotho’s trusted full‑stack technology partner.
             </p>
             {/* ──────────────── Updated Social Icons ──────────────── */}

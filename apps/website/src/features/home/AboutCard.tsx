@@ -12,7 +12,7 @@ export default function AboutCard() {
   const floatingCards = [
     {
       id: 1,
-      text: "Smart Systems.",
+      text: "Smart Solutions.",
       gradient: "linear-gradient(135deg, #00A8E8, #1E3A6D)",
       delay: 0,
       yOffset: [-10, 10],
@@ -64,7 +64,7 @@ export default function AboutCard() {
                   that help businesses modernise, scale, and succeed. Our team
                   combines deep local understanding with global best practices to
                   deliver{" "}
-                  <strong className="text-white">Smart Systems</strong> that
+                  <strong className="text-white">Smart Solutions</strong> that
                   drive{" "}
                   <strong className="text-brand-gold">Real Results</strong>.
                 </p>

@@ -77,8 +77,8 @@ export default function TopNavbar({ onMobileMenuToggle, mobileMenuOpen }: TopNav
               <span className="text-white">ForgeTech</span>
               <span className="text-brand-gold">Nobles</span>
             </h1>
-            <span className="hidden sm:inline text-[8px] sm:text-[9px] uppercase tracking-[0.2em] font-medium text-white/80 whitespace-nowrap">
-              Smart Systems. Real Results.
+            <span className="hidden sm:inline text-[7px] sm:text-[7px] uppercase tracking-[0.2em] font-medium text-white/80 whitespace-nowrap">
+              Smart Solutions. Real Results.
             </span>
           </div>
         </Link>
