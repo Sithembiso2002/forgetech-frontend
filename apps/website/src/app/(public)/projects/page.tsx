@@ -77,7 +77,7 @@ export default async function CaseStudiesPage() {
               {projects.map((project: any) => (
                 <Link
                   key={project.id}
-                  href={`/case-studies/${project.slug}`}
+                  href={`/projects/${project.slug}`}
                   className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
                 >
                   {/* Image */}
@@ -132,7 +132,7 @@ export default async function CaseStudiesPage() {
                     )}
 
                     <span className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-brand-tech group-hover:gap-2 transition-all">
-                      Read case study <ArrowRight size={16} />
+                      View Project <ArrowRight size={16} />
                     </span>
                   </div>
                 </Link>
