@@ -17,17 +17,7 @@ const fallbackProjects = [
   technologies: ["Modern JavaScript framework", "Tailwind CSS", "cPanel server", "Configurations"],
   results: "Professional online presence with 99.9% uptime",
 },
-{
-  id: "2",
-  title: "Business Email Setup & Hosting for PREEMINENT",
-  slug: "preeminent-emails",
-  industry: "Professional Services",
-  shortDescription:
-    "Configured and hosted professional business emails for PREEMINENT on cPanel, ensuring reliable communication and brand consistency.",
-  mainImage: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=600&h=400&fit=crop",
-  technologies: ["cPanel", "DNS Configuration", "Email Security"],
-  results: "Seamless email setup with zero downtime",
-},
+
 
 ];
 

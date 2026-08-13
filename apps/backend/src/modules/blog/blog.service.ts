@@ -78,4 +78,11 @@ export class BlogService {
     const minutes = Math.ceil(words / wordsPerMinute);
     return `${minutes} min read`;
   }
+
+  async findAllAdmin() {
+  return this.prisma.blogPost.findMany({
+    orderBy: { createdAt: 'desc' },
+    select: { id: true, title: true, slug: true, excerpt: true, coverImage: true, createdAt: true, readingTime: true, published: true },
+  });
+}
 }

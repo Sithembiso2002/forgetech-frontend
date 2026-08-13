@@ -1,5 +1,8 @@
-import { Injectable } from '@nestjs/common';
+// apps/backend/src/services/services.service.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateServiceDto } from './dto/create-service.dto';
+import { UpdateServiceDto } from './dto/update-service.dto';
 
 @Injectable()
 export class ServicesService {
@@ -54,7 +57,7 @@ export class ServicesService {
             image: true,
           },
         },
-        Project: {                   // ✅ include linked projects
+        Project: {
           orderBy: { createdAt: 'desc' },
           select: {
             id: true,
@@ -100,5 +103,55 @@ export class ServicesService {
       testimonial: service.testimonial,
       order: service.order,
     };
+  }
+
+  // ── NEW CRUD methods ─────────────────────────────
+  async create(dto: CreateServiceDto) {
+    return this.prisma.service.create({
+      data: {
+        title: dto.title,
+        slug: dto.slug,
+        icon: dto.icon,
+        shortDescription: dto.shortDescription,
+        description: dto.description,
+        benefits: dto.benefits ?? [],
+        technologies: dto.technologies ?? [],
+        industries: dto.industries ?? [],
+        process: dto.process ?? [],
+        order: dto.order ?? 0,
+        heroImage: dto.heroImage ?? null,
+        secondaryImage: dto.secondaryImage ?? null,
+        testimonial: dto.testimonial ?? undefined,
+      },
+    });
+  }
+
+  async update(id: string, dto: UpdateServiceDto) {
+    // Ensure the service exists
+    await this.prisma.service.findUniqueOrThrow({ where: { id } });
+
+    return this.prisma.service.update({
+      where: { id },
+      data: {
+        ...(dto.title !== undefined && { title: dto.title }),
+        ...(dto.slug !== undefined && { slug: dto.slug }),
+        ...(dto.icon !== undefined && { icon: dto.icon }),
+        ...(dto.shortDescription !== undefined && { shortDescription: dto.shortDescription }),
+        ...(dto.description !== undefined && { description: dto.description }),
+        ...(dto.benefits !== undefined && { benefits: dto.benefits }),
+        ...(dto.technologies !== undefined && { technologies: dto.technologies }),
+        ...(dto.industries !== undefined && { industries: dto.industries }),
+        ...(dto.process !== undefined && { process: dto.process }),
+        ...(dto.order !== undefined && { order: dto.order }),
+        ...(dto.heroImage !== undefined && { heroImage: dto.heroImage }),
+        ...(dto.secondaryImage !== undefined && { secondaryImage: dto.secondaryImage }),
+        ...(dto.testimonial !== undefined && { testimonial: dto.testimonial }),
+      },
+    });
+  }
+
+  async remove(id: string) {
+    await this.prisma.service.findUniqueOrThrow({ where: { id } });
+    return this.prisma.service.delete({ where: { id } });
   }
 }

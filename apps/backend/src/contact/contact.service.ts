@@ -23,6 +23,8 @@ export class ContactService {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
+
+      
     });
 
     await transporter.sendMail({
@@ -40,5 +42,13 @@ export class ContactService {
         <p>${dto.message.replace(/\n/g, '<br>')}</p>
       `,
     });
+
   }
+
+  // Add this method inside the ContactService class
+async findAll() {
+  return this.prisma.contactSubmission.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+}
 }

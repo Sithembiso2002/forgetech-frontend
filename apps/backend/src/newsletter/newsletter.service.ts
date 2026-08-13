@@ -56,4 +56,11 @@ export class NewsletterService {
 
     await transporter.sendMail(mailOptions);
   }
+
+  // Add this method inside the NewsletterService class
+async findAll() {
+  return this.prisma.newsletterSubscription.findMany({
+    orderBy: { subscribedAt: 'desc' },
+  });
+}
 }

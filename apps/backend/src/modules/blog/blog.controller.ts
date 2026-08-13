@@ -14,4 +14,9 @@ export class BlogController {
   findOne(@Param('slug') slug: string) {
     return this.blogService.findBySlug(slug);
   }
+
+  @Get('admin')
+findAllAdmin() {
+  return this.blogService.findAllAdmin(); // without the published filter
+}
 }

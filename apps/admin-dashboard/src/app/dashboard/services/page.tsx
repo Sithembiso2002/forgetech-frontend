@@ -1,4 +1,5 @@
-﻿import ServicesTable from "@/features/services/ServicesTable";
+﻿// apps/admin-dashboard/src/app/dashboard/services/page.tsx
+import ServicesTable from "@/features/services/ServicesTable";
 
 export default function ServicesPage() {
   return (

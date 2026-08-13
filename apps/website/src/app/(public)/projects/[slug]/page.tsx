@@ -51,40 +51,7 @@ const fallbackCaseStudies: Record<string, any> = {
     },
     cta: "Get a Website Like 3ranges Trail",
   },
-  "preeminent-emails": {
-    title: "Business Email Setup & Hosting for PREEMINENT on cPanel",
-    slug: "preeminent-emails",
-    industry: "Professional Services",
-    heroImage: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=1200&h=600&fit=crop",
-    secondaryImage: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=600&h=400&fit=crop",
-    overview:
-      "PREEMINENT, a professional services firm in Lesotho, needed secure, reliable business email addresses to improve brand consistency and streamline communication with clients. Their existing email setup was fragmented and lacked professionalism.",
-    description:
-      "We set up professional business email addresses (e.g., info@preeminent.co.ls) directly on PREEMINENT's cPanel server. This included creating email accounts, configuring webmail access, setting up email clients (Outlook, mobile devices), and implementing DNS records (MX, SPF, DKIM, DMARC) for maximum deliverability and security. The entire setup was completed with zero disruption to their existing operations.",
-    objectives: [
-      "Set up professional business email addresses on cPanel",
-      "Configure DNS for maximum deliverability and security",
-      "Provide training on webmail and email clients",
-      "Ensure seamless transition with zero downtime",
-    ],
-    features: [
-      "Professional email addresses with custom domain",
-      "cPanel email accounts with webmail access",
-      "Advanced email security (spam filtering, authentication)",
-      "Assistance with email client setup (Outlook, mobile)",
-    ],
-    technologies: ["cPanel", "DNS Configuration", "Email Security"],
-    results:
-      "PREEMINENT now communicates with clients using professional, branded email addresses. Email deliverability improved significantly, and the team can access their emails via webmail or their preferred email client. The setup was completed with zero data loss and zero downtime.",
-    testimonial: {
-      quote:
-        "ForgeTech Nobles handled our email setup flawlessly. We now have professional emails hosted on our own cPanel, and everything works perfectly.",
-      client: "PREEMINENT",
-      company: "PREEMINENT",
-      avatar: "https://i.pravatar.cc/150?img=2",
-    },
-    cta: "Set Up Professional Emails on cPanel",
-  },
+  
 };
 
 export default async function CaseStudyDetailPage({

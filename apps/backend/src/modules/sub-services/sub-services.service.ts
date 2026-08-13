@@ -1,22 +1,52 @@
+// apps/backend/src/modules/sub-services/sub-services.service.ts
 import { Injectable } from '@nestjs/common';
-import { CreateSubServiceDto } from './dto/sub-service.dto';
-import { UpdateSubServiceDto } from './dto/sub-service.dto';
+import { PrismaService } from '../../prisma/prisma.service';
+import { CreateSubServiceDto, UpdateSubServiceDto } from './dto/sub-service.dto';
 
 @Injectable()
 export class SubServicesService {
-  findAll() {
-    throw new Error('Method not implemented.');
+  constructor(private prisma: PrismaService) {}
+
+  // Admin dashboard overview
+  async findAll() {
+    return this.prisma.subService.findMany({
+      orderBy: { order: 'asc' },
+    });
   }
-  findOne(id: string) {
-    throw new Error('Method not implemented.');
+
+  // Get a single sub-service
+  async findOne(id: string) {
+    return this.prisma.subService.findUnique({
+      where: { id },
+    });
   }
-  create(dto: CreateSubServiceDto) {
-    throw new Error('Method not implemented.');
+
+  // Create a new sub-service
+  async create(dto: CreateSubServiceDto) {
+    return this.prisma.subService.create({
+      data: {
+        ...dto,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
   }
-  update(id: string, dto: UpdateSubServiceDto) {
-    throw new Error('Method not implemented.');
+
+  // Update an existing sub-service
+  async update(id: string, dto: UpdateSubServiceDto) {
+    return this.prisma.subService.update({
+      where: { id },
+      data: {
+        ...dto,
+        updatedAt: new Date(),
+      },
+    });
   }
-  remove(id: string) {
-    throw new Error('Method not implemented.');
+
+  // Remove a sub-service
+  async remove(id: string) {
+    return this.prisma.subService.delete({
+      where: { id },
+    });
   }
 }

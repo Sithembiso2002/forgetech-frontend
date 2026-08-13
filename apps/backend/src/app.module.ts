@@ -20,6 +20,7 @@ import { HomepageServicesModule } from './homepage-services/homepage-services.mo
 import { TeammessageModule } from './teammessage/teammessage.module';
 import { NewsModule } from './modules/news/news.module';
 import { HomepageNewsModule } from './modules/homepage-news/homepage-news.module';
+import { AdminController } from './modules/admin/admin.controller';
 
 @Module({
   imports: [
@@ -45,5 +46,12 @@ import { HomepageNewsModule } from './modules/homepage-news/homepage-news.module
     TeammessageModule,
     HomepageNewsModule,
   ],
+
+  controllers: [
+  // ... existing controllers ...
+  AdminController,
+],
 })
+
+
 export class AppModule {}

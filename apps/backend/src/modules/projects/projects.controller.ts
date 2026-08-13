@@ -1,3 +1,4 @@
+// apps/backend/src/modules/projects/projects.controller.ts
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto, UpdateProjectDto } from './dto/project.dto';
@@ -11,12 +12,14 @@ export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Get()
+  // NO GUARD – public
   findAll(@Query('featured') featured?: string) {
     if (featured === 'true') return this.projectsService.findFeatured();
     return this.projectsService.findAll();
   }
 
   @Get(':slug')
+  // NO GUARD – public
   findOne(@Param('slug') slug: string) {
     return this.projectsService.findBySlug(slug);
   }
