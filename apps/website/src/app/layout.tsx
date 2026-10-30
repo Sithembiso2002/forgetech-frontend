@@ -1,4 +1,5 @@
-﻿import type { Metadata } from "next";
+﻿// apps/website/src/app/layout.tsx
+import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/layout/navbar/Navbar";
 import Footer from "@/components/layout/footer/Footer";
@@ -12,12 +13,12 @@ export const metadata: Metadata = {
     "ForgeTech Nobles provides end‑to‑end technology solutions – infrastructure, custom software, cloud, analytics, IT support, and digital consulting for businesses in Lesotho.",
   icons: {
     icon: [
-      { url: "/images/logo/logo2.png", sizes: "16x16", type: "image/png" },
-      { url: "/images/logo/logo2.png", sizes: "32x32", type: "image/png" },
-      { url: "/images/logo/logo2.png", sizes: "48x48", type: "image/png" },
+      { url: "/images/logo/favicon.png", type: "image/png", sizes: "192x192" },
     ],
-    shortcut: "/images/logo/logo2.png",
-    apple: "/images/logo/logo2.png",
+    shortcut: "/images/logo/favicon.png",
+    apple: [
+      { url: "/images/logo/favicon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
   openGraph: {
     title: "ForgeTech Nobles – Integrated Digital Solutions",
@@ -53,7 +54,7 @@ export default function RootLayout({
         <Footer />
         <WhatsAppButton />
         <BackToTop />
-        
+
         {/* JSON‑LD structured data for search engines */}
         <script
           type="application/ld+json"
