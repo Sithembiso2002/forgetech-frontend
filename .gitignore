@@ -39,3 +39,6 @@ yarn-error.log*
 
 *.zip
 apps/backend.zip
+.env.production
+.env.production.local
+!.env.example
