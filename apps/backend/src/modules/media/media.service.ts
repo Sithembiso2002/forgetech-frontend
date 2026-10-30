@@ -1,3 +1,4 @@
+// apps/backend/src/modules/media/media.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -5,10 +6,29 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class MediaService {
   constructor(private prisma: PrismaService) {}
 
-  async saveFile(fileName: string, url: string, mimeType: string, size: number, altText?: string) {
-    return this.prisma.media.create({ data: { fileName, url, mimeType, size, altText } });
+  async saveFile(
+    fileName: string,
+    url: string,
+    mimeType: string,
+    size: number,
+    altText?: string,
+  ) {
+    return this.prisma.media.create({
+      data: {
+        fileName,
+        url,
+        mimeType,
+        size,
+        ...(altText ? { altText } : {}),
+      },
+    });
   }
 
-  findAll() { return this.prisma.media.findMany({ orderBy: { createdAt: 'desc' } }); }
-  remove(id: string) { return this.prisma.media.delete({ where: { id } }); }
+  findAll() {
+    return this.prisma.media.findMany({ orderBy: { createdAt: 'desc' } });
+  }
+
+  remove(id: string) {
+    return this.prisma.media.delete({ where: { id } });
+  }
 }

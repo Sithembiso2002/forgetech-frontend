@@ -12,12 +12,12 @@ export const metadata: Metadata = {
     "ForgeTech Nobles provides end‑to‑end technology solutions – infrastructure, custom software, cloud, analytics, IT support, and digital consulting for businesses in Lesotho.",
   icons: {
     icon: [
-      { url: "/images/logo/logo1.png", sizes: "16x16", type: "image/png" },
-      { url: "/images/logo/logo1.png", sizes: "32x32", type: "image/png" },
-      { url: "/images/logo/logo1.png", sizes: "48x48", type: "image/png" },
+      { url: "/images/logo/logo2.png", sizes: "16x16", type: "image/png" },
+      { url: "/images/logo/logo2.png", sizes: "32x32", type: "image/png" },
+      { url: "/images/logo/logo2.png", sizes: "48x48", type: "image/png" },
     ],
-    shortcut: "/images/logo/logo1.png",
-    apple: "/images/logo/logo1.png",
+    shortcut: "/images/logo/logo2.png",
+    apple: "/images/logo/logo2.png",
   },
   openGraph: {
     title: "ForgeTech Nobles – Integrated Digital Solutions",

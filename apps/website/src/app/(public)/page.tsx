@@ -2,7 +2,6 @@
 import IndustriesSection from "@/features/home/IndustriesSection";
 import WhyChooseUs from "@/features/home/WhyChooseUs";
 import Process from "@/features/home/Process";
-import FeaturedProjects from "@/features/home/FeaturedProjects";
 import CTA from "@/features/home/CTA";
 import NewsSection from "@/features/home/NewsSection";
 import ContactSection from "@/features/home/ContactSection";
@@ -35,7 +34,7 @@ export default async function HomePage() {
       <CaseStudiesSection />
       <WhyChooseUs />
       <CTA />
-      <FeaturedProjects />
+
       <FAQSection />
       <NewsletterSection />
       <ContactSection />

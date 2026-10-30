@@ -1,4 +1,5 @@
-﻿import Image from "next/image";
+﻿// apps/website/src/app/(public)/about/page.tsx
+import Image from "next/image";
 import Button from "@/components/ui/Button";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { Target, Eye, Shield, Users, ArrowRight } from "lucide-react";
@@ -68,17 +69,17 @@ export default function AboutPage() {
                 className="text-left"
               />
               <p className="text-sm md:text-base text-neutral-slate leading-relaxed mb-4 md:mb-6">
-                ForgeTech Nobles is a Lesotho-based technology company dedicated to helping 
-                businesses grow through innovative, reliable, and scalable digital solutions. 
+                ForgeTech Nobles is a Lesotho-based technology company dedicated to helping
+                businesses grow through innovative, reliable, and scalable digital solutions.
                 We specialize in custom software development, web applications, cloud solutions,
                 infrastructure and networking, data & analytics, and digital transformation consulting.
               </p>
               <p className="text-sm md:text-base text-neutral-slate leading-relaxed mb-6 md:mb-8">
-                Founded by a multidisciplinary team of technology and business professionals, 
+                Founded by a multidisciplinary team of technology and business professionals,
                 we combine technical expertise with strategic thinking to solve real business challenges.
-                Our approach is centered on understanding each client's unique needs and delivering 
+                Our approach is centered on understanding each client's unique needs and delivering
                 solutions that improve efficiency, productivity, and long-term growth.
-                At ForgeTech Nobles, we believe that technology should be practical, secure, and built to create measurable business value. 
+                At ForgeTech Nobles, we believe that technology should be practical, secure, and built to create measurable business value.
                 Guided by our commitment to quality, innovation, and integrity, we work closely with our clients to become trusted long-term technology partners.
               </p>
               <h3 className="text-base md:text-lg text-neutral-slate leading-relaxed mb-6 md:mb-8 font-bold">
@@ -151,10 +152,11 @@ export default function AboutPage() {
             <div className="mb-8 md:mb-10 text-center">
               <div className="relative w-28 h-28 md:w-36 md:h-36 mx-auto mb-3 md:mb-4 rounded-full overflow-hidden border-4 border-brand-gold shadow-xl">
                 <Image
-                  src="images/Picture4.png"
+                  src="/images/Picture4.png"
                   alt="Temoho Sekautu"
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 112px, 144px"
                 />
               </div>
               <h3 className="font-bold text-xl md:text-2xl text-brand-deep">Temoho Sekautu</h3>
@@ -176,24 +178,26 @@ export default function AboutPage() {
               <div className="text-center">
                 <div className="relative w-24 h-24 md:w-28 md:h-28 mx-auto mb-3 md:mb-4 rounded-full overflow-hidden border-2 border-brand-gold">
                   <Image
-                    src="images/Picture3.png"
-                    alt="Motele Tseou"
+                    src="/images/logo/pa2.png"
+                    alt="Mr Paballo .js"
                     fill
                     className="object-cover"
+                    sizes="(max-width: 768px) 96px, 112px"
                   />
                 </div>
-                <h3 className="font-bold text-base md:text-lg text-brand-deep">Motele Tseou</h3>
+                <h3 className="font-bold text-base md:text-lg text-brand-deep">Mr Paballo .js</h3>
                 <p className="text-brand-tech font-medium text-xs md:text-sm">Business & Finance</p>
-                <p className="text-neutral-slate text-xs mt-1">Marketing & Accounts</p>
+                <p className="text-neutral-slate text-xs mt-1">Marketing & Business oerations</p>
               </div>
 
               <div className="text-center">
                 <div className="relative w-24 h-24 md:w-28 md:h-28 mx-auto mb-3 md:mb-4 rounded-full overflow-hidden border-2 border-brand-gold">
                   <Image
-                    src="images/Picture1.png"
+                    src="/images/Picture1.png"
                     alt="Sethembiso Sehlabane"
                     fill
                     className="object-cover"
+                    sizes="(max-width: 768px) 96px, 112px"
                   />
                 </div>
                 <h3 className="font-bold text-base md:text-lg text-brand-deep">Sethembiso Sehlabane</h3>
@@ -204,10 +208,11 @@ export default function AboutPage() {
               <div className="text-center col-span-2 md:col-span-1 mx-auto max-w-[200px]">
                 <div className="relative w-24 h-24 md:w-28 md:h-28 mx-auto mb-3 md:mb-4 rounded-full overflow-hidden border-2 border-brand-gold">
                   <Image
-                    src="images/Picture2.png"
+                    src="/images/Picture2.png"
                     alt="Mosa Manyeli"
                     fill
                     className="object-cover"
+                    sizes="(max-width: 768px) 96px, 112px"
                   />
                 </div>
                 <h3 className="font-bold text-base md:text-lg text-brand-deep">Mosa Manyeli</h3>

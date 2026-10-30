@@ -1,8 +1,6 @@
 ﻿/** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export", 
   images: {
-    unoptimized: true, 
     remotePatterns: [
       {
         protocol: "https",
@@ -18,11 +16,10 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "i.pravatar.cc",   // ← add this line
+        hostname: "i.pravatar.cc",
       },
     ],
   },
 };
-
 
 export default nextConfig;

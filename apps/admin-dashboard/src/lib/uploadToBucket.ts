@@ -1,18 +1,33 @@
 // apps/admin-dashboard/src/lib/uploadToBucket.ts
-import { createClient } from '@/lib/supabase/client';
+import { authFetch } from "./api";
 
-export async function uploadToBucket(bucket: string, file: File): Promise<string> {
-  const supabase = createClient();
-  const fileExt = file.name.split('.').pop();
-  const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
-  const filePath = `${fileName}`;
+/**
+ * Uploads a file to a Supabase Storage bucket via the backend.
+ *
+ * The backend is responsible for talking to Supabase Storage using
+ * its service-role key. The browser never holds that key and never
+ * calls Supabase Storage directly.
+ *
+ * @param bucket - Storage bucket name (whitelisted on the backend)
+ * @param file   - The File selected by the user
+ * @returns      - The public URL of the uploaded file
+ */
+export async function uploadToBucket(
+  bucket: string,
+  file: File,
+): Promise<string> {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("bucket", bucket);
 
-  const { data, error } = await supabase.storage
-    .from(bucket)
-    .upload(filePath, file, { upsert: false });
+  const result = await authFetch("/api/media/upload", {
+    method: "POST",
+    body: formData,
+  });
 
-  if (error) throw new Error(`Upload failed: ${error.message}`);
+  if (!result?.url) {
+    throw new Error("Upload failed: no URL returned from server");
+  }
 
-  const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(filePath);
-  return urlData.publicUrl;
+  return result.url as string;
 }

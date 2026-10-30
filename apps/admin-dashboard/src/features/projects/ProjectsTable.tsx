@@ -1,3 +1,4 @@
+// apps/admin-dashboard/src/features/projects/ProjectsTable.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -6,8 +7,12 @@ import { uploadToBucket } from "@/lib/uploadToBucket";
 import { DataTable } from "@/components/DataTable";
 import { FormBuilder, type FieldConfig } from "@/components/FormBuilder";
 import ImageUploader from "@/components/ImageUploader";
+import MultiImageUploader from "@/components/MultiImageUploader";
 import TiptapEditor from "@/components/TiptapEditor";
-import { Plus, Pencil, Trash2, X } from "lucide-react";
+import { Plus, Pencil, Trash2, X, ExternalLink } from "lucide-react";
+
+const WEBSITE_URL =
+  process.env.NEXT_PUBLIC_WEBSITE_URL ?? "http://localhost:3000";
 
 interface Project {
   id: string;
@@ -22,7 +27,8 @@ interface Project {
   results: string;
   featured: boolean;
   mainImage: string | null;
-  screenshots: string[];
+  screenshots: string[] | null;
+  liveUrl: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -32,7 +38,6 @@ export default function ProjectsTable() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Project | null>(null);
   const [formValues, setFormValues] = useState<Record<string, any>>({});
@@ -43,7 +48,7 @@ export default function ProjectsTable() {
     try {
       const data = await authFetch("/api/projects");
       if (Array.isArray(data)) setProjects(data);
-    } catch (err: any) {
+    } catch {
       setError("Failed to load projects.");
     } finally {
       setLoading(false);
@@ -68,6 +73,8 @@ export default function ProjectsTable() {
       results: "",
       featured: false,
       mainImage: "",
+      screenshots: [] as (string | File)[],
+      liveUrl: "",
     });
     setFormErrors({});
     setModalOpen(true);
@@ -87,6 +94,8 @@ export default function ProjectsTable() {
       results: project.results || "",
       featured: project.featured || false,
       mainImage: project.mainImage || "",
+      screenshots: (project.screenshots ?? []) as (string | File)[],
+      liveUrl: project.liveUrl || "",
     });
     setFormErrors({});
     setModalOpen(true);
@@ -102,16 +111,25 @@ export default function ProjectsTable() {
     setFormErrors({});
 
     try {
+      // 1. Upload main image if a new File was selected
       let imageUrl = formValues.mainImage;
-
-      // Upload if it's a File object
       if (imageUrl instanceof File) {
         imageUrl = await uploadToBucket("project-images", imageUrl);
       }
 
+      // 2. Upload any new screenshot Files; keep existing URLs as-is
+      const rawScreenshots = (formValues.screenshots ?? []) as (string | File)[];
+      const screenshotUrls = await Promise.all(
+        rawScreenshots.map(async (item) =>
+          item instanceof File
+            ? await uploadToBucket("project-images", item)
+            : item,
+        ),
+      );
+
       const payload = {
         title: formValues.title,
-        slug: formValues.slug,
+        slug: formValues.slug || undefined, // backend regenerates
         client: formValues.client || null,
         industry: formValues.industry,
         overview: formValues.overview,
@@ -127,6 +145,8 @@ export default function ProjectsTable() {
         results: formValues.results,
         featured: formValues.featured || false,
         mainImage: imageUrl || null,
+        screenshots: screenshotUrls,
+        liveUrl: formValues.liveUrl?.trim() || null,
       };
 
       if (editing) {
@@ -160,16 +180,97 @@ export default function ProjectsTable() {
     }
   };
 
-  // Column definitions for DataTable
+  // ── Columns ─────────────────────────────────────
   const columns = [
     { key: "title", header: "Title", sortable: true },
     { key: "industry", header: "Industry", sortable: true },
+
+    {
+      key: "screenshots",
+      header: "Screenshots",
+      render: (item: Project) => {
+        const shots = item.screenshots ?? [];
+        if (shots.length === 0) {
+          return <span className="text-gray-400 text-sm">—</span>;
+        }
+        const visible = shots.slice(0, 3);
+        const remaining = shots.length - visible.length;
+        return (
+          <div className="flex items-center -space-x-2">
+            {visible.map((url, i) => (
+              <a
+                key={`${item.id}-shot-${i}`}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative z-10 hover:z-20 transition-transform hover:scale-125"
+                title={`Open screenshot ${i + 1}`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={url}
+                  alt={`${item.title} screenshot ${i + 1}`}
+                  className="h-10 w-10 rounded object-cover border-2 border-white shadow-sm bg-gray-100"
+                />
+              </a>
+            ))}
+            {remaining > 0 && (
+              <span
+                className="relative z-10 h-10 w-10 rounded bg-brand-navy text-white text-xs font-semibold flex items-center justify-center border-2 border-white shadow-sm"
+                title={`${remaining} more`}
+              >
+                +{remaining}
+              </span>
+            )}
+          </div>
+        );
+      },
+    },
+
     {
       key: "featured",
       header: "Featured",
       sortable: true,
       render: (item: Project) => (item.featured ? "Yes" : "No"),
     },
+
+    {
+      key: "liveUrl",
+      header: "Live site",
+      render: (item: Project) =>
+        item.liveUrl ? (
+          <a
+            href={item.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-emerald-600 hover:underline text-sm font-medium"
+            title={item.liveUrl}
+          >
+            <ExternalLink size={14} />
+            Live
+          </a>
+        ) : (
+          <span className="text-gray-400 text-sm">—</span>
+        ),
+    },
+
+    {
+      key: "link",
+      header: "Public page",
+      render: (item: Project) => (
+        <a
+          href={`${WEBSITE_URL}/projects/${item.slug}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-brand-tech hover:underline text-sm font-medium"
+          title={`View ${item.title} on website`}
+        >
+          <ExternalLink size={14} />
+          View
+        </a>
+      ),
+    },
+
     {
       key: "actions",
       header: "Actions",
@@ -186,12 +287,13 @@ export default function ProjectsTable() {
     },
   ];
 
-  // Form fields configuration for FormBuilder
+  // ── Fields ──────────────────────────────────────
   const fields: FieldConfig[] = [
     { name: "title", label: "Title", type: "text", placeholder: "Project title", required: true },
-    { name: "slug", label: "Slug", type: "text", placeholder: "project-slug", required: true },
+    { name: "slug", label: "Slug (auto-generated on save)", type: "text", placeholder: "leave blank to auto-generate" },
     { name: "client", label: "Client", type: "text", placeholder: "Client name (optional)" },
     { name: "industry", label: "Industry", type: "text", placeholder: "Industry", required: true },
+    { name: "liveUrl", label: "Live site URL", type: "text", placeholder: "https://example.com" },
     { name: "objectivesInput", label: "Objectives (comma separated)", type: "text", placeholder: "Objective 1, Objective 2" },
     { name: "featuresInput", label: "Features (comma separated)", type: "text", placeholder: "Feature 1, Feature 2" },
     { name: "technologiesInput", label: "Technologies (comma separated)", type: "text", placeholder: "React, Node.js" },
@@ -207,6 +309,8 @@ export default function ProjectsTable() {
         <Plus size={16} /> Add Project
       </button>
 
+      {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+
       <DataTable
         columns={columns}
         data={projects}
@@ -216,7 +320,6 @@ export default function ProjectsTable() {
         pageSize={10}
       />
 
-      {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-start justify-center pt-10 pb-10 bg-black/60 backdrop-blur-sm overflow-y-auto">
           <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl p-6 mx-4">
@@ -239,26 +342,45 @@ export default function ProjectsTable() {
               submitLabel={saving ? "Saving..." : "Save Project"}
               loading={saving}
             >
-              {/* Image upload */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Main Image</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Main Image
+                </label>
                 <ImageUploader
                   value={formValues.mainImage}
                   onChange={(file) => handleChange("mainImage", file)}
-                  previewUrl={typeof formValues.mainImage === "string" ? formValues.mainImage : undefined}
+                  previewUrl={
+                    typeof formValues.mainImage === "string"
+                      ? formValues.mainImage
+                      : undefined
+                  }
                 />
               </div>
 
-              {/* Rich editors for overview and results */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Overview</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Screenshots (up to 5)
+                </label>
+                <MultiImageUploader
+                  values={formValues.screenshots ?? []}
+                  onChange={(values) => handleChange("screenshots", values)}
+                  maxImages={5}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Overview
+                </label>
                 <TiptapEditor
                   content={formValues.overview}
                   onChange={(html) => handleChange("overview", html)}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Results</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Results
+                </label>
                 <TiptapEditor
                   content={formValues.results}
                   onChange={(html) => handleChange("results", html)}

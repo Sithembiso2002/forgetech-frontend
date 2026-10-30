@@ -1,8 +1,8 @@
-﻿"use client";
+﻿// apps/admin-dashboard/src/components/ImageUploader.tsx
+"use client";
 
 import { useState, useRef, DragEvent } from "react";
 import { Upload, X } from "lucide-react";
-import Image from "next/image";
 
 interface ImageUploaderProps {
   value: File | string | null;
@@ -40,43 +40,37 @@ export default function ImageUploader({
     if (inputRef.current) inputRef.current.value = "";
   };
 
-  // ── Drag‑and‑Drop Handlers ──────────────────────────
   const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(true);
   };
-
   const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
   };
-
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
   };
-
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-
     const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith("image/")) {
-      handleFile(file);
-    }
+    if (file && file.type.startsWith("image/")) handleFile(file);
   };
 
-  // ── Preview / Upload Area ────────────────────────────
   const displaySrc = preview || (typeof value === "string" ? value : previewUrl);
 
   return (
     <div className={className}>
       {displaySrc ? (
         <div className="relative inline-block">
-          <Image
+          {/* Plain <img> — no remotePatterns, no blob: URL issues */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={displaySrc}
             alt="Uploaded image"
             width={160}
