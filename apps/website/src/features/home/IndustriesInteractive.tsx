@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useMotionValue, useAnimationFrame, animate } from "framer-motion";
 import Image from "next/image";
 import { CheckCircle, ArrowRight, ArrowUpRight } from "lucide-react";
+import RichText from "@/components/RichText";
 
 interface Industry {
   id: string;
@@ -245,9 +246,7 @@ export default function IndustriesInteractive({
             <h3 className="text-2xl sm:text-3xl font-extrabold text-brand-deep mb-4">
               {activeIndustry.name}
             </h3>
-            <p className="text-base sm:text-lg text-neutral-slate leading-relaxed mb-6">
-              {activeIndustry.description}
-            </p>
+            <RichText html={activeIndustry.description} className="text-base sm:text-lg text-neutral-slate leading-relaxed mb-6" as="p" />
 
             {activeIndustry.benefits.length > 0 && (
               <div className="mb-6">

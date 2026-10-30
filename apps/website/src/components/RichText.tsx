@@ -1,17 +1,14 @@
 // apps/website/src/components/RichText.tsx
 import DOMPurify from "isomorphic-dompurify";
 
+const HTML_TAG_REGEX = /<\/?[a-z][\s\S]*?>/i;
+
 type RichTextProps = {
   html: string | null | undefined;
   className?: string;
-  as?: "div" | "article" | "section" | "span";
+  as?: "div" | "article" | "section" | "p" | "span";
 };
 
-/**
- * Renders Tiptap HTML safely.
- * - Sanitizes with DOMPurify (strips <script>, on* handlers, javascript: URLs, etc.)
- * - Renders as real HTML, not escaped text
- */
 export default function RichText({
   html,
   className = "",
@@ -19,15 +16,20 @@ export default function RichText({
 }: RichTextProps) {
   if (!html) return null;
 
+  if (!HTML_TAG_REGEX.test(html)) {
+    return <Tag className={className}>{html}</Tag>;
+  }
+
   const clean = DOMPurify.sanitize(html, {
     USE_PROFILES: { html: true },
     ADD_ATTR: ["target", "rel"],
-    // Optional: strip inline styles if you prefer pure Tailwind classes
     FORBID_ATTR: ["style"],
   });
 
+  const FinalTag = Tag === "p" ? "div" : Tag;
+
   return (
-    <Tag
+    <FinalTag
       className={`rich-text ${className}`.trim()}
       dangerouslySetInnerHTML={{ __html: clean }}
     />

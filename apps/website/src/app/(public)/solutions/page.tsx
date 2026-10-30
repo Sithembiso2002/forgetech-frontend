@@ -5,6 +5,7 @@ import Button from "@/components/ui/Button";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { ArrowRight, Check } from "lucide-react";
 import IndustriesCarousel from "@/features/solutions/IndustriesCarousel";
+import RichText from "@/components/RichText";
 
 
 export const metadata: Metadata = {
@@ -198,9 +199,7 @@ export default function SolutionsPage() {
                   <h3 className="text-2xl font-extrabold text-brand-deep mb-3">
                     {solution.title}
                   </h3>
-                  <p className="text-neutral-slate leading-relaxed mb-6 flex-1">
-                    {solution.description}
-                  </p>
+                  <RichText html={solution.description} className="text-neutral-slate leading-relaxed mb-6 flex-1" as="p" />
                   <ul className="space-y-2 mb-8">
                     {solution.highlights.map((item, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-neutral-slate">

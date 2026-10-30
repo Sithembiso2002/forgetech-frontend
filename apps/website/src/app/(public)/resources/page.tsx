@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Newspaper, Lightbulb } from "lucide-react";
+import RichText from "@/components/RichText";
 
 
 export const metadata: Metadata = {
@@ -91,9 +92,7 @@ export default function ResourcesPage() {
 
                 {/* Content */}
                 <div className="flex-1 p-6 md:p-8 flex flex-col">
-                  <p className="text-neutral-slate leading-relaxed mb-6 flex-1">
-                    {card.description}
-                  </p>
+                  <RichText html={card.description} className="text-neutral-slate leading-relaxed mb-6 flex-1" as="p" />
                   <span className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-gold text-brand-navy font-semibold px-6 py-3 text-sm shadow-md hover:bg-brand-orange transition-colors">
                     {card.cta}
                     <ArrowRight size={16} />

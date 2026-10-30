@@ -15,6 +15,7 @@ import {
   AlertCircle,
   Clock,
 } from "lucide-react";
+import RichText from "@/components/RichText";
 
 // ── Type definitions ──
 interface SearchResult {
@@ -196,7 +197,7 @@ function SearchResults() {
                         {item.title}
                       </h3>
                       {item.description && (
-                        <p className="text-sm text-neutral-slate line-clamp-2">{item.description}</p>
+                        <RichText html={item.description} className="text-sm text-neutral-slate line-clamp-2" as="p" />
                       )}
                     </div>
                     <div className="flex-shrink-0 text-brand-tech opacity-0 group-hover:opacity-100 transition-opacity">

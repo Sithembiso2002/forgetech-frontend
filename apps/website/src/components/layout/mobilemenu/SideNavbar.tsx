@@ -38,6 +38,7 @@ import {
   Users,
   Globe,
 } from "lucide-react";
+import RichText from "@/components/RichText";
 
 // ----------------------------------------------------------------------
 // Custom Social Icons (inline SVGs) – unchanged
@@ -279,7 +280,7 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
                             {link.icon && <link.icon size={20} className="text-[#00A8E8] group-hover:text-[#1E3A6D] transition-colors" />}
                             <div className="text-left">
                               <div className="text-xs sm:text-sm font-semibold text-[#1F2937]">{link.label}</div>
-                              {link.description && <div className="text-[10px] sm:text-xs text-gray-500">{link.description}</div>}
+                              {link.description && <RichText html={link.description} className="text-[10px] sm:text-xs text-gray-500" as="div" />}
                             </div>
                           </div>
                           <ChevronDown
@@ -321,7 +322,7 @@ export default function SideNavbar({ isOpen, onClose }: SideNavbarProps) {
                           {link.icon && <link.icon size={20} className="text-[#00A8E8] group-hover:text-[#1E3A6D] transition-colors" />}
                           <div className="text-left">
                             <div className="text-xs sm:text-sm font-semibold text-[#1F2937]">{link.label}</div>
-                            {link.description && <div className="text-[10px] sm:text-xs text-gray-500">{link.description}</div>}
+                            {link.description && <RichText html={link.description} className="text-[10px] sm:text-xs text-gray-500" as="div" />}
                           </div>
                         </div>
                         <ChevronRight size={16} className="text-gray-400" />

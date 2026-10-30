@@ -2,6 +2,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import RichText from "@/components/RichText";
 
 const phases = [
   {
@@ -94,9 +95,7 @@ export default function ProcessSection() {
                   {phase.title}
                 </h3>
                 {/* Description */}
-                <p className="text-sm text-neutral-slate leading-relaxed">
-                  {phase.description}
-                </p>
+                <RichText html={phase.description} className="text-sm text-neutral-slate leading-relaxed" as="p" />
               </div>
 
               {/* Arrow connector (except after the last phase) */}

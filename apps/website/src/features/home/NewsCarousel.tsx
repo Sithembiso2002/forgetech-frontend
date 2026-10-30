@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import RichText from "@/components/RichText";
 
 interface NewsItem {
   id: string;
@@ -248,9 +249,7 @@ function SlideCard({ news, isActive }: { news: NewsItem; isActive: boolean }) {
           {news.title}
         </h3>
         {isActive && (
-          <p className="text-xs sm:text-sm md:text-lg text-white/80 line-clamp-2 mb-4 sm:mb-6">
-            {news.summary}
-          </p>
+          <RichText html={news.summary} className="text-xs sm:text-sm md:text-lg text-white/80 line-clamp-2 mb-4 sm:mb-6" as="p" />
         )}
         <a
           href={`/resources/news/${news.slug}`}

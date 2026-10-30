@@ -13,8 +13,8 @@ import {
   Lightbulb,
   Headphones,
   ArrowUpRight,
-  ArrowRight,
 } from "lucide-react";
+import RichText from "@/components/RichText";
 
 const iconMap: Record<string, React.ReactNode> = {
   software: <Code className="w-6 h-6" />,
@@ -50,6 +50,11 @@ export default function ServicesInteractive({
   const activeService =
     services.find((s) => s.id === activeId) || services[0];
 
+  // Pick whichever text field actually has content — description is rich HTML,
+  // shortDescription is plain text. RichText handles both.
+  const descriptionHtml =
+    activeService.description?.trim() || activeService.shortDescription || "";
+
   return (
     <div className="w-full max-w-7xl mx-auto">
       {/* Header */}
@@ -66,7 +71,7 @@ export default function ServicesInteractive({
 
       {/* Two‑Column Layout */}
       <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
-        {/* LEFT – Service Selector (grid on mobile, single column on desktop) */}
+        {/* LEFT – Service Selector */}
         <div className="lg:w-1/4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2 md:gap-3">
           {services.map((service) => {
             const isActive = service.id === activeId;
@@ -76,7 +81,7 @@ export default function ServicesInteractive({
                 onClick={() => setActiveId(service.id)}
                 onMouseEnter={() => setActiveId(service.id)}
                 className={`
-                  group flex items-center gap-3 px-3 py-3 md:px-4 md:py-4 rounded-xl transition-all duration-300 
+                  group flex items-center gap-3 px-3 py-3 md:px-4 md:py-4 rounded-xl transition-all duration-300
                   w-full text-left
                   ${
                     isActive
@@ -92,7 +97,9 @@ export default function ServicesInteractive({
                       : "bg-slate-100 text-slate-500 group-hover:bg-slate-200"
                   }`}
                 >
-                  {iconMap[service.icon] || <Code className="w-4 h-4 md:w-5 md:h-5" />}
+                  {iconMap[service.icon] || (
+                    <Code className="w-4 h-4 md:w-5 md:h-5" />
+                  )}
                 </span>
                 <span className="font-semibold text-sm md:text-base leading-tight">
                   {service.title}
@@ -114,25 +121,25 @@ export default function ServicesInteractive({
               className="bg-white rounded-2xl shadow-lg border border-[#E5E7EB] p-4 md:p-8 lg:p-10"
             >
               <div className="flex flex-col md:flex-row gap-6 md:gap-8">
-                {/* Images Column – side-by-side on mobile, stacked on desktop */}
+                {/* Images Column */}
                 <div className="md:w-[30%] flex flex-row md:flex-col gap-4">
                   <div className="relative w-1/2 md:w-full aspect-[4/3] rounded-xl overflow-hidden border border-slate-200">
                     <img
                       src={
-                        (activeService as any).image1 ||
+                        activeService.image1 ||
                         "https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=300&fit=crop"
                       }
-                      alt={activeService.title + " image 1"}
+                      alt={`${activeService.title} image 1`}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="relative w-1/2 md:w-full aspect-[4/3] rounded-xl overflow-hidden border border-slate-200">
                     <img
                       src={
-                        (activeService as any).image2 ||
+                        activeService.image2 ||
                         "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop"
                       }
-                      alt={activeService.title + " image 2"}
+                      alt={`${activeService.title} image 2`}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -143,52 +150,56 @@ export default function ServicesInteractive({
                   <h3 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#0B1F3A] mb-3 md:mb-4">
                     {activeService.title}
                   </h3>
-                  <p className="text-sm md:text-base lg:text-lg text-slate-600 leading-relaxed mb-5 md:mb-6">
-                    {activeService.description ||
-                      activeService.shortDescription}
-                  </p>
 
-                  {/* Features – two columns */}
-                  {activeService.features && activeService.features.length > 0 && (
-                    <div className="grid grid-cols-2 gap-x-4 md:gap-x-6 gap-y-2 mb-6 md:mb-8">
-                      {activeService.features.map((feat) => (
-                        <div
-                          key={feat}
-                          className="flex items-center gap-2 text-xs md:text-sm lg:text-base font-semibold text-slate-700"
-                        >
-                          <span className="text-[#1558E9]">
-                            <svg
-                              className="w-4 h-4 md:w-5 md:h-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2.5}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          </span>
-                          {feat}
-                        </div>
-                      ))}
-                    </div>
+                  {/* Description — RichText handles both HTML and plain text */}
+                  {descriptionHtml && (
+                    <RichText
+                      html={descriptionHtml}
+                      className="text-sm md:text-base lg:text-lg text-slate-600 leading-relaxed mb-5 md:mb-6"
+                    />
                   )}
 
-                  {/* CTA Button + Arrow Square */}
+                  {/* Features */}
+                  {activeService.features &&
+                    activeService.features.length > 0 && (
+                      <div className="grid grid-cols-2 gap-x-4 md:gap-x-6 gap-y-2 mb-6 md:mb-8">
+                        {activeService.features.map((feat) => (
+                          <div
+                            key={feat}
+                            className="flex items-center gap-2 text-xs md:text-sm lg:text-base font-semibold text-slate-700"
+                          >
+                            <span className="text-[#1558E9]">
+                              <svg
+                                className="w-4 h-4 md:w-5 md:h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2.5}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            </span>
+                            {feat}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                  {/* CTA Button */}
                   <div className="flex items-center gap-3 mt-2">
-                    <a
+                    <Link
                       href={`/services/${activeService.slug}`}
                       className="inline-flex items-center gap-2 rounded-full bg-[#F5A623] text-[#0B1F3A] px-5 md:px-6 py-2.5 md:py-3 text-sm font-bold hover:bg-amber-400 transition-colors shadow-md"
                     >
                       {activeService.cta || "Learn More"}
-                    <span className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[#0B1F3A] text-white shadow-md">
-                      <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
-                    </span>
-                    </a>
-
+                      <span className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[#0B1F3A] text-white shadow-md">
+                        <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
+                      </span>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -204,10 +215,8 @@ export default function ServicesInteractive({
           className="group inline-flex items-center gap-3 rounded-full bg-[#0B1F3A] text-[#F5A623] px-6 md:px-8 py-3 md:py-3.5 text-sm font-bold shadow-md hover:bg-amber-400 transition-colors overflow-hidden"
         >
           <span>All Services</span>
-          <span className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-lg bg-[#0B1F3A] text-white transition-transform duration-300 group-hover:translate-x-1">
-                    <span className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[#F5A623] text-white shadow-md">
-                      <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
-                    </span>
+          <span className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-lg bg-[#F5A623] text-white transition-transform duration-300 group-hover:translate-x-1">
+            <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
           </span>
         </Link>
       </div>

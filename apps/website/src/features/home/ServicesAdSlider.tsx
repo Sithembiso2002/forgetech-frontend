@@ -4,7 +4,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 const ads = [
   {
@@ -94,12 +94,9 @@ export default function ServicesAdSlider() {
                 backgroundPosition: "center",
               }}
             >
-              {/* Pro‑level gradient overlay – multi‑stop, preserves image details */}
               <div className="absolute inset-0 bg-gradient-to-tr from-brand-navy/90 via-brand-navy/40 to-transparent md:bg-gradient-to-l md:from-brand-navy/95 md:via-brand-navy/60 md:to-transparent pointer-events-none" />
-              {/* Subtle radial glow behind text */}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(245,177,26,0.15),transparent_70%)] pointer-events-none" />
 
-              {/* Left zone – decorative icon with refined styling */}
               <div className="relative z-10 w-full md:w-2/5 flex items-end p-4 sm:p-6 md:p-8">
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -123,7 +120,6 @@ export default function ServicesAdSlider() {
                 </motion.div>
               </div>
 
-              {/* Right zone – text & CTA with crisp typography */}
               <div className="relative z-10 flex-1 flex flex-col justify-center p-4 sm:p-6 md:p-10">
                 <motion.h3
                   initial={{ opacity: 0, y: 15 }}
@@ -151,7 +147,7 @@ export default function ServicesAdSlider() {
                     className="group inline-flex items-center gap-2 rounded-full bg-brand-gold text-brand-navy px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-bold hover:bg-amber-400 hover:shadow-[0_0_25px_rgba(245,177,26,0.6)] transition-all duration-300 active:scale-95 focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2"
                   >
                     Consult for Free
-                                        <span className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[#0B1F3A] text-white shadow-md">
+                    <span className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[#0B1F3A] text-white shadow-md">
                       <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
                     </span>
                   </Link>
@@ -160,9 +156,6 @@ export default function ServicesAdSlider() {
             </motion.div>
           </AnimatePresence>
         </div>
-
-        {/* Dot indicators */}
-
       </div>
     </section>
   );

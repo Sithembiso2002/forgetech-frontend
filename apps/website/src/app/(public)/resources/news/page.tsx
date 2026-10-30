@@ -4,6 +4,7 @@ import { getNews } from "@/lib/api";
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Clock, Newspaper } from "lucide-react";
+import RichText from "@/components/RichText";
 
 // Fallback static data (unchanged)
 const fallbackNews = [
@@ -133,9 +134,7 @@ let news;
                     <h2 className="text-base md:text-xl font-bold text-brand-deep mb-2 group-hover:text-brand-tech transition-colors leading-tight">
                       {article.title}
                     </h2>
-                    <p className="text-neutral-slate text-xs md:text-sm leading-relaxed line-clamp-3 flex-1">
-                      {article.summary}
-                    </p>
+                    <RichText html={article.summary} className="text-neutral-slate text-xs md:text-sm leading-relaxed line-clamp-3 flex-1" as="p" />
                     <span className="inline-block mt-3 md:mt-4 text-xs md:text-sm font-medium text-brand-tech group-hover:underline">
                       Read more →
                     </span>

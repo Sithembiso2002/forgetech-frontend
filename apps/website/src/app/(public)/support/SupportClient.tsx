@@ -11,6 +11,7 @@ import {
   Send,
 } from "lucide-react";
 import Link from "next/link";
+import RichText from "@/components/RichText";
 
 
 const supportCards = [
@@ -121,9 +122,7 @@ export default function SupportClient() {
                 <h3 className="text-lg font-bold text-brand-deep mb-2">
                   {card.title}
                 </h3>
-                <p className="text-neutral-slate text-sm mb-4">
-                  {card.description}
-                </p>
+                <RichText html={card.description} className="text-neutral-slate text-sm mb-4" as="p" />
                 <span className="text-brand-tech font-semibold text-sm flex items-center gap-1">
                   {card.actionText}
                   {!card.isLink && !card.disabled && (

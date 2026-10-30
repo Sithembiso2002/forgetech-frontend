@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Check, ArrowRight, ArrowUpRight } from "lucide-react";
+import RichText from "@/components/RichText";
 
 const solutions = [
   {
@@ -130,9 +131,7 @@ export default function SolutionCardsSection() {
 
               {/* Content – compact text */}
               <div className="p-3 sm:p-5 flex flex-col flex-1">
-                <p className="text-[12px] sm:text-sm lg:text-base text-neutral-slate leading-relaxed mb-3 sm:mb-4">
-                  {solution.description}
-                </p>
+                <RichText html={solution.description} className="text-[12px] sm:text-sm lg:text-base text-neutral-slate leading-relaxed mb-3 sm:mb-4" as="p" />
 
                 {/* Highlights */}
                 <div className="space-y-1.5 sm:space-y-2 mb-4 sm:mb-6 flex-1">

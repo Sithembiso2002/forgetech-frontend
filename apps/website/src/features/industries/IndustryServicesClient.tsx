@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import { CheckCircle, ArrowRight, Quote } from "lucide-react";
 import Image from "next/image";
+import RichText from "@/components/RichText";
 
 // ---------- Icon map ----------
 const iconMap: Record<string, React.ReactNode> = {
@@ -437,9 +438,7 @@ export default function IndustryServicesClient({
             </div>
 
             {/* Main description (two paragraphs) */}
-            <p className="text-lg text-neutral-slate leading-relaxed mb-6">
-              {active.description}
-            </p>
+            <RichText html={active.description} className="text-lg text-neutral-slate leading-relaxed mb-6" as="p" />
             {active.longDescription && (
               <p className="text-base text-neutral-slate leading-relaxed mb-8 whitespace-pre-line">
                 {active.longDescription}
@@ -479,7 +478,7 @@ export default function IndustryServicesClient({
             {active.results && (
               <div className="mb-8 p-4 bg-brand-deep/5 rounded-xl border border-brand-deep/10">
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-brand-gold mb-2">Expected Results</h4>
-                <p className="text-neutral-slate text-sm">{active.results}</p>
+                <RichText html={active.results} className="text-neutral-slate text-sm" as="p" />
               </div>
             )}
 

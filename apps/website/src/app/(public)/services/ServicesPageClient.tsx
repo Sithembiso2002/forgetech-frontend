@@ -20,6 +20,11 @@ import {
   FaQuoteLeft,
 } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import RichText from "@/components/RichText";
+
+// Env-driven API URL — works locally and in production.
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:10000";
 
 // Icon map – unchanged
 const iconMap: Record<string, React.ReactNode> = {
@@ -44,7 +49,7 @@ export default function ServicesPageClient({
 
   useEffect(() => {
     if (!leadership) {
-      fetch("http://localhost:10000/api/teammessage")
+      fetch(`${API_URL}/api/teammessage`)
         .then((res) => res.json())
         .then((data) => data && setLeadership(data))
         .catch(() => {});
@@ -113,9 +118,11 @@ export default function ServicesPageClient({
                   <p className="text-base md:text-lg text-brand-tech font-medium mb-3 md:mb-4">
                     {service.shortDescription}
                   </p>
-                  <p className="text-sm md:text-lg text-neutral-slate leading-relaxed mb-6 md:mb-8">
-                    {service.description}
-                  </p>
+                  <RichText
+                    html={service.description}
+                    className="text-sm md:text-lg text-neutral-slate leading-relaxed mb-6 md:mb-8"
+                    as="p"
+                  />
 
                   {/* Key Benefits */}
                   {service.keyBenefits && service.keyBenefits.length > 0 && (
@@ -130,14 +137,16 @@ export default function ServicesPageClient({
                             className="flex items-start gap-2 md:gap-3 p-2 md:p-3 rounded-xl bg-neutral-offwhite border border-neutral-border/40"
                           >
                             <FaCheck className="text-brand-tech mt-0.5 flex-shrink-0 text-sm" />
-                            <span className="text-xs md:text-sm text-brand-deep font-medium">{benefit}</span>
+                            <span className="text-xs md:text-sm text-brand-deep font-medium">
+                              {benefit}
+                            </span>
                           </div>
                         ))}
                       </div>
                     </div>
                   )}
 
-                  {/* Premium Learn More button */}
+                  {/* Learn More button */}
                   <motion.div whileHover="hover" className="inline-flex items-center">
                     <Link
                       href={`/services/${service.slug}`}
@@ -152,13 +161,16 @@ export default function ServicesPageClient({
                   </motion.div>
                 </div>
 
-                {/* Image side – with hover zoom */}
+                {/* Image side */}
                 <div
                   className={`flex-1 ${index % 2 === 0 ? "lg:order-2" : "lg:order-1"}`}
                 >
                   <div className="relative w-full aspect-[4/3] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl group cursor-pointer">
                     <Image
-                      src={service.image || "https://placehold.co/600x450/1E3A6D/ffffff?text=Service"}
+                      src={
+                        service.image ||
+                        "https://placehold.co/600x450/1E3A6D/ffffff?text=Service"
+                      }
                       alt={service.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -168,7 +180,7 @@ export default function ServicesPageClient({
                 </div>
               </div>
 
-              {/* Sub‑services Grid – one column on mobile, two on small screens */}
+              {/* Sub-services grid */}
               {service.subServices && service.subServices.length > 0 && (
                 <div className="mt-12 md:mt-20">
                   <h3 className="text-xl md:text-3xl font-extrabold text-brand-deep mb-6 md:mb-10 text-center">
@@ -183,15 +195,24 @@ export default function ServicesPageClient({
                       >
                         <div className="relative w-full h-32 md:h-44 overflow-hidden">
                           <Image
-                            src={sub.image || "https://placehold.co/400x160/1E3A6D/ffffff?text=Sub+Service"}
+                            src={
+                              sub.image ||
+                              "https://placehold.co/400x160/1E3A6D/ffffff?text=Sub+Service"
+                            }
                             alt={sub.name}
                             fill
                             className="object-cover transition-transform duration-500 hover:scale-110"
                           />
                         </div>
                         <div className="p-4 md:p-6">
-                          <h4 className="font-bold text-brand-deep text-base md:text-xl mb-2">{sub.name}</h4>
-                          <p className="text-neutral-slate text-xs md:text-sm leading-relaxed">{sub.description}</p>
+                          <h4 className="font-bold text-brand-deep text-base md:text-xl mb-2">
+                            {sub.name}
+                          </h4>
+                          <RichText
+                            html={sub.description}
+                            className="text-neutral-slate text-xs md:text-sm leading-relaxed"
+                            as="p"
+                          />
                         </div>
                       </motion.div>
                     ))}
@@ -199,7 +220,7 @@ export default function ServicesPageClient({
                 </div>
               )}
 
-              {/* Features – fully responsive grid */}
+              {/* Features */}
               {service.features && service.features.length > 0 && (
                 <div className="mt-12 md:mt-16">
                   <h3 className="text-xl md:text-2xl font-extrabold text-brand-deep mb-6 md:mb-8 text-center">
@@ -212,7 +233,9 @@ export default function ServicesPageClient({
                         className="flex items-center gap-2 md:gap-3 p-3 md:p-4 rounded-xl bg-neutral-offwhite border border-neutral-border/30 hover:border-brand-tech/30 transition-colors"
                       >
                         <FaCheck className="text-brand-tech flex-shrink-0 text-sm" />
-                        <span className="text-xs md:text-sm font-semibold text-brand-deep">{feat}</span>
+                        <span className="text-xs md:text-sm font-semibold text-brand-deep">
+                          {feat}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -269,7 +292,8 @@ export default function ServicesPageClient({
         <div
           className="absolute inset-0 opacity-10"
           style={{
-            backgroundImage: "radial-gradient(circle, #0B1F3A 1px, transparent 1px)",
+            backgroundImage:
+              "radial-gradient(circle, #0B1F3A 1px, transparent 1px)",
             backgroundSize: "30px 30px",
           }}
         />
@@ -289,7 +313,8 @@ export default function ServicesPageClient({
             transition={{ delay: 0.2 }}
             className="text-base md:text-lg mb-8 md:mb-10 max-w-2xl mx-auto text-brand-navy/80"
           >
-            Schedule a free consultation and we'll help you build the perfect solution.
+            Schedule a free consultation and we'll help you build the perfect
+            solution.
           </motion.p>
           <Button
             href="/contact"

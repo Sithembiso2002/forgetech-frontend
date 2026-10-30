@@ -4,6 +4,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { AlertTriangle, Home, RefreshCw } from "lucide-react";
+import RichText from "@/components/RichText";
 
 export default function Error({
   error,
@@ -56,9 +57,7 @@ export default function Error({
             <summary className="text-xs text-neutral-slate cursor-pointer">
               Error details
             </summary>
-            <p className="mt-2 text-xs text-red-600 bg-red-50 rounded-lg p-3 break-all font-mono">
-              {error.message}
-            </p>
+            <RichText html={error.message} className="mt-2 text-xs text-red-600 bg-red-50 rounded-lg p-3 break-all font-mono" as="p" />
           </details>
         )}
       </motion.div>
