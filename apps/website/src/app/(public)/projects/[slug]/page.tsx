@@ -1,13 +1,19 @@
 // apps/website/src/app/(public)/projects/[slug]/page.tsx
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import RichText from "@/components/RichText";
 import ScreenshotGallery from "@/components/ScreenshotGallery";
 import { CheckCircle, ArrowRight, ExternalLink, Camera } from "lucide-react";
 
+// Prefer server-only API_URL (not bundled into the client); fall back to the
+// public one, then to localhost for dev. In production, one of the first two
+// MUST be set — otherwise every fetch targets a URL that doesn't exist.
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL ?? "http://localhost:10000";
+  process.env.API_URL ??
+  process.env.NEXT_PUBLIC_API_URL ??
+  "http://localhost:10000";
 
 type Project = {
   id: string;
@@ -49,37 +55,52 @@ function prettyUrl(url: string): string {
 }
 
 async function getProject(slug: string): Promise<Project | null> {
+  const url = `${API_URL}/api/projects/${encodeURIComponent(slug)}`;
   try {
-    const res = await fetch(
-      `${API_URL}/api/projects/${encodeURIComponent(slug)}`,
-      { next: { revalidate: 60, tags: ["projects", `project:${slug}`] } },
-    );
-    if (!res.ok) return null;
+    const res = await fetch(url, {
+      next: { revalidate: 60, tags: ["projects", `project:${slug}`] },
+      signal: AbortSignal.timeout(30000),
+    });
+    if (!res.ok) {
+      console.error(
+        `[getProject] ${slug}: HTTP ${res.status} ${res.statusText} from ${url}`,
+      );
+      return null;
+    }
     return (await res.json()) as Project;
-  } catch {
+  } catch (error) {
+    console.error(`[getProject] ${slug}: fetch failed for ${url}`, error);
     return null;
   }
 }
 
 async function getAllProjectSlugs(): Promise<string[]> {
+  const url = `${API_URL}/api/projects`;
   try {
-    const res = await fetch(`${API_URL}/api/projects`, {
+    const res = await fetch(url, {
       next: { revalidate: 60, tags: ["projects"] },
+      signal: AbortSignal.timeout(30000),
     });
-    if (!res.ok) return [];
+    if (!res.ok) {
+      console.error(
+        `[getAllProjectSlugs] HTTP ${res.status} ${res.statusText} from ${url}`,
+      );
+      return [];
+    }
     const projects = (await res.json()) as { slug?: string }[];
     return projects.map((p) => p.slug).filter((s): s is string => !!s);
-  } catch {
+  } catch (error) {
+    console.error(`[getAllProjectSlugs] fetch failed for ${url}`, error);
     return [];
   }
 }
 
+// Optional: still declare slugs so tooling knows which routes exist, but
+// with `connection()` below the pages render on-demand regardless.
 export async function generateStaticParams() {
   const slugs = await getAllProjectSlugs();
   return slugs.map((slug) => ({ slug }));
 }
-
-export const revalidate = 60;
 
 export async function generateMetadata({
   params,
@@ -110,6 +131,10 @@ export default async function ProjectDetailPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  // Force runtime rendering. Prevents a failed build-time fetch (e.g. Render
+  // cold start) from baking a 404 into the static HTML for this slug.
+  await connection();
+
   const { slug } = await params;
   const project = await getProject(slug);
   if (!project) notFound();
@@ -226,8 +251,14 @@ export default async function ProjectDetailPage({
                   </h3>
                   <ul className="space-y-3 mb-8">
                     {objectives.map((obj, i) => (
-                      <li key={i} className="flex items-start gap-3 text-neutral-slate">
-                        <CheckCircle size={20} className="text-brand-tech mt-0.5 flex-shrink-0" />
+                      <li
+                        key={i}
+                        className="flex items-start gap-3 text-neutral-slate"
+                      >
+                        <CheckCircle
+                          size={20}
+                          className="text-brand-tech mt-0.5 flex-shrink-0"
+                        />
                         <span>{obj}</span>
                       </li>
                     ))}
@@ -241,8 +272,14 @@ export default async function ProjectDetailPage({
                   </h3>
                   <ul className="space-y-3">
                     {features.map((feat, i) => (
-                      <li key={i} className="flex items-start gap-3 text-neutral-slate">
-                        <CheckCircle size={20} className="text-brand-tech mt-0.5 flex-shrink-0" />
+                      <li
+                        key={i}
+                        className="flex items-start gap-3 text-neutral-slate"
+                      >
+                        <CheckCircle
+                          size={20}
+                          className="text-brand-tech mt-0.5 flex-shrink-0"
+                        />
                         <span>{feat}</span>
                       </li>
                     ))}
@@ -358,7 +395,11 @@ export default async function ProjectDetailPage({
           <div className="container mx-auto px-6 lg:px-12 max-w-4xl">
             <div className="bg-neutral-offwhite rounded-3xl p-8 md:p-12 shadow-sm flex flex-col md:flex-row items-start gap-8">
               <div className="text-brand-gold/40">
-                <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-12 h-12"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                 </svg>
               </div>
@@ -400,8 +441,8 @@ export default async function ProjectDetailPage({
             Ready to Start Your Project?
           </h2>
           <p className="text-lg max-w-2xl mx-auto mb-8 text-brand-navy/80">
-            Let’s discuss how we can deliver real results for your business, just
-            like we did for {project.client ?? "our clients"}.
+            Let’s discuss how we can deliver real results for your business,
+            just like we did for {project.client ?? "our clients"}.
           </p>
           <Button
             href="/contact"
