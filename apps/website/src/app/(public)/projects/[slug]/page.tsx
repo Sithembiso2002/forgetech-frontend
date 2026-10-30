@@ -58,8 +58,10 @@ async function getProject(slug: string): Promise<Project | null> {
   const url = `${API_URL}/api/projects/${encodeURIComponent(slug)}`;
   try {
     const res = await fetch(url, {
+      // ISR cache at the fetch level: fresh for 60s, invalidated by tag.
       next: { revalidate: 60, tags: ["projects", `project:${slug}`] },
-      signal: AbortSignal.timeout(30000),
+      // 60s covers Render free-tier cold starts (usually 20–30s) with margin.
+      signal: AbortSignal.timeout(60000),
     });
     if (!res.ok) {
       console.error(
@@ -72,34 +74,6 @@ async function getProject(slug: string): Promise<Project | null> {
     console.error(`[getProject] ${slug}: fetch failed for ${url}`, error);
     return null;
   }
-}
-
-async function getAllProjectSlugs(): Promise<string[]> {
-  const url = `${API_URL}/api/projects`;
-  try {
-    const res = await fetch(url, {
-      next: { revalidate: 60, tags: ["projects"] },
-      signal: AbortSignal.timeout(30000),
-    });
-    if (!res.ok) {
-      console.error(
-        `[getAllProjectSlugs] HTTP ${res.status} ${res.statusText} from ${url}`,
-      );
-      return [];
-    }
-    const projects = (await res.json()) as { slug?: string }[];
-    return projects.map((p) => p.slug).filter((s): s is string => !!s);
-  } catch (error) {
-    console.error(`[getAllProjectSlugs] fetch failed for ${url}`, error);
-    return [];
-  }
-}
-
-// Optional: still declare slugs so tooling knows which routes exist, but
-// with `connection()` below the pages render on-demand regardless.
-export async function generateStaticParams() {
-  const slugs = await getAllProjectSlugs();
-  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
