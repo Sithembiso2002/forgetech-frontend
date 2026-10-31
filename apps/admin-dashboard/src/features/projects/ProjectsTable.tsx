@@ -21,9 +21,9 @@ interface Project {
   client: string | null;
   industry: string;
   overview: string;
-  objectives: string[];
-  features: string[];
-  technologies: string[];
+  objectives: string[] | null;
+  features: string[] | null;
+  technologies: string[] | null;
   results: string;
   featured: boolean;
   mainImage: string | null;
@@ -31,6 +31,45 @@ interface Project {
   liveUrl: string | null;
   createdAt: string;
   updatedAt: string;
+}
+
+// Safely extract a meaningful error message from anything authFetch throws
+function extractError(err: unknown): string {
+  if (!err) return "Something went wrong";
+  if (typeof err === "string") return err;
+  if (err instanceof Error) return err.message;
+  const e = err as { message?: unknown; error?: unknown };
+  if (typeof e?.message === "string") return e.message;
+  if (Array.isArray(e?.message)) return e.message.join(", ");
+  if (typeof e?.error === "string") return e.error;
+  try {
+    return JSON.stringify(err);
+  } catch {
+    return "Something went wrong";
+  }
+}
+
+function toCommaString(arr: string[] | null | undefined): string {
+  return Array.isArray(arr) ? arr.filter(Boolean).join(", ") : "";
+}
+
+function fromCommaString(str: string | null | undefined): string[] {
+  if (!str) return [];
+  return str
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+// Normalize a URL: prepend https:// if missing, return null if empty/invalid.
+function normalizeUrl(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  // Reject strings that obviously aren't URL-like
+  if (!/^[\w.-]+\.[a-z]{2,}/i.test(trimmed)) return null;
+  return `https://${trimmed}`;
 }
 
 export default function ProjectsTable() {
@@ -47,9 +86,14 @@ export default function ProjectsTable() {
   const fetchProjects = async () => {
     try {
       const data = await authFetch("/api/projects");
-      if (Array.isArray(data)) setProjects(data);
-    } catch {
-      setError("Failed to load projects.");
+      if (Array.isArray(data)) {
+        setProjects(data);
+        setError("");
+      } else {
+        setError("Unexpected response from server");
+      }
+    } catch (err) {
+      setError(`Failed to load projects: ${extractError(err)}`);
     } finally {
       setLoading(false);
     }
@@ -63,7 +107,6 @@ export default function ProjectsTable() {
     setEditing(null);
     setFormValues({
       title: "",
-      slug: "",
       client: "",
       industry: "",
       overview: "",
@@ -83,19 +126,20 @@ export default function ProjectsTable() {
   const openEditModal = (project: Project) => {
     setEditing(project);
     setFormValues({
-      title: project.title || "",
-      slug: project.slug || "",
-      client: project.client || "",
-      industry: project.industry || "",
-      overview: project.overview || "",
-      objectivesInput: (project.objectives || []).join(", "),
-      featuresInput: (project.features || []).join(", "),
-      technologiesInput: (project.technologies || []).join(", "),
-      results: project.results || "",
-      featured: project.featured || false,
-      mainImage: project.mainImage || "",
-      screenshots: (project.screenshots ?? []) as (string | File)[],
-      liveUrl: project.liveUrl || "",
+      title: project.title ?? "",
+      client: project.client ?? "",
+      industry: project.industry ?? "",
+      overview: project.overview ?? "",
+      objectivesInput: toCommaString(project.objectives),
+      featuresInput: toCommaString(project.features),
+      technologiesInput: toCommaString(project.technologies),
+      results: project.results ?? "",
+      featured: project.featured ?? false,
+      mainImage: project.mainImage ?? "",
+      screenshots: Array.isArray(project.screenshots)
+        ? (project.screenshots as (string | File)[])
+        : [],
+      liveUrl: project.liveUrl ?? "",
     });
     setFormErrors({});
     setModalOpen(true);
@@ -107,47 +151,80 @@ export default function ProjectsTable() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (saving) return;
     setSaving(true);
     setFormErrors({});
 
     try {
-      // 1. Upload main image if a new File was selected
-      let imageUrl = formValues.mainImage;
-      if (imageUrl instanceof File) {
-        imageUrl = await uploadToBucket("project-images", imageUrl);
+      // ── Validation (client-side, before upload)
+      const title = typeof formValues.title === "string" ? formValues.title.trim() : "";
+      const industry =
+        typeof formValues.industry === "string" ? formValues.industry.trim() : "";
+
+      const fieldErrors: Record<string, string> = {};
+      if (!title) fieldErrors.title = "Title is required";
+      if (!industry) fieldErrors.industry = "Industry is required";
+      if (Object.keys(fieldErrors).length > 0) {
+        setFormErrors(fieldErrors);
+        setSaving(false);
+        return;
       }
 
-      // 2. Upload any new screenshot Files; keep existing URLs as-is
-      const rawScreenshots = (formValues.screenshots ?? []) as (string | File)[];
-      const screenshotUrls = await Promise.all(
-        rawScreenshots.map(async (item) =>
-          item instanceof File
-            ? await uploadToBucket("project-images", item)
-            : item,
-        ),
-      );
+      // ── Upload main image if a new File was selected
+      let imageUrl: string | null =
+        typeof formValues.mainImage === "string" && formValues.mainImage
+          ? formValues.mainImage
+          : null;
 
+      if (formValues.mainImage instanceof File) {
+        try {
+          imageUrl = await uploadToBucket("project-images", formValues.mainImage);
+        } catch (err) {
+          throw new Error(`Main image upload failed: ${extractError(err)}`);
+        }
+      }
+
+      // ── Upload any new screenshots, keep existing URLs
+      const rawScreenshots: (string | File)[] = Array.isArray(formValues.screenshots)
+        ? formValues.screenshots
+        : [];
+      const screenshotUrls: string[] = [];
+      for (const item of rawScreenshots) {
+        if (item instanceof File) {
+          try {
+            screenshotUrls.push(await uploadToBucket("project-images", item));
+          } catch (err) {
+            throw new Error(`Screenshot upload failed: ${extractError(err)}`);
+          }
+        } else if (typeof item === "string" && item.trim()) {
+          screenshotUrls.push(item.trim());
+        }
+      }
+
+      // ── Build the payload. NOTE: no `slug` field — the backend regenerates
+      //    it from `title`. Sending slug causes confusion when the user edits it.
       const payload = {
-        title: formValues.title,
-        slug: formValues.slug || undefined, // backend regenerates
-        client: formValues.client || null,
-        industry: formValues.industry,
-        overview: formValues.overview,
-        objectives: formValues.objectivesInput
-          ? formValues.objectivesInput.split(",").map((s: string) => s.trim()).filter(Boolean)
-          : [],
-        features: formValues.featuresInput
-          ? formValues.featuresInput.split(",").map((s: string) => s.trim()).filter(Boolean)
-          : [],
-        technologies: formValues.technologiesInput
-          ? formValues.technologiesInput.split(",").map((s: string) => s.trim()).filter(Boolean)
-          : [],
-        results: formValues.results,
-        featured: formValues.featured || false,
-        mainImage: imageUrl || null,
+        title,
+        client:
+          typeof formValues.client === "string" && formValues.client.trim()
+            ? formValues.client.trim()
+            : null,
+        industry,
+        overview:
+          typeof formValues.overview === "string" ? formValues.overview : "",
+        objectives: fromCommaString(formValues.objectivesInput),
+        features: fromCommaString(formValues.featuresInput),
+        technologies: fromCommaString(formValues.technologiesInput),
+        results:
+          typeof formValues.results === "string" ? formValues.results : "",
+        featured: Boolean(formValues.featured),
+        mainImage: imageUrl,
         screenshots: screenshotUrls,
-        liveUrl: formValues.liveUrl?.trim() || null,
+        liveUrl: normalizeUrl(formValues.liveUrl),
       };
+
+      // Debug log to the console — remove once editing is confirmed working
+      console.log("[ProjectsTable] submitting", { editingId: editing?.id, payload });
 
       if (editing) {
         await authFetch(`/api/projects/${editing.id}`, {
@@ -163,8 +240,9 @@ export default function ProjectsTable() {
 
       await fetchProjects();
       setModalOpen(false);
-    } catch (err: any) {
-      setFormErrors({ general: err.message || "Something went wrong" });
+    } catch (err) {
+      console.error("[ProjectsTable] submit failed", err);
+      setFormErrors({ general: extractError(err) });
     } finally {
       setSaving(false);
     }
@@ -175,16 +253,15 @@ export default function ProjectsTable() {
     try {
       await authFetch(`/api/projects/${id}`, { method: "DELETE" });
       fetchProjects();
-    } catch (err: any) {
-      alert(`Delete failed: ${err.message}`);
+    } catch (err) {
+      alert(`Delete failed: ${extractError(err)}`);
     }
   };
 
-  // ── Columns ─────────────────────────────────────
+  // ── Columns (unchanged)
   const columns = [
     { key: "title", header: "Title", sortable: true },
     { key: "industry", header: "Industry", sortable: true },
-
     {
       key: "screenshots",
       header: "Screenshots",
@@ -226,14 +303,12 @@ export default function ProjectsTable() {
         );
       },
     },
-
     {
       key: "featured",
       header: "Featured",
       sortable: true,
       render: (item: Project) => (item.featured ? "Yes" : "No"),
     },
-
     {
       key: "liveUrl",
       header: "Live site",
@@ -253,7 +328,6 @@ export default function ProjectsTable() {
           <span className="text-gray-400 text-sm">—</span>
         ),
     },
-
     {
       key: "link",
       header: "Public page",
@@ -270,16 +344,23 @@ export default function ProjectsTable() {
         </a>
       ),
     },
-
     {
       key: "actions",
       header: "Actions",
       render: (item: Project) => (
         <div className="flex gap-2">
-          <button onClick={() => openEditModal(item)} className="text-brand-tech hover:underline">
+          <button
+            onClick={() => openEditModal(item)}
+            className="text-brand-tech hover:underline"
+            type="button"
+          >
             <Pencil size={16} />
           </button>
-          <button onClick={() => handleDelete(item.id)} className="text-red-500 hover:underline">
+          <button
+            onClick={() => handleDelete(item.id)}
+            className="text-red-500 hover:underline"
+            type="button"
+          >
             <Trash2 size={16} />
           </button>
         </div>
@@ -287,10 +368,9 @@ export default function ProjectsTable() {
     },
   ];
 
-  // ── Fields ──────────────────────────────────────
+  // ── Fields (slug removed — backend regenerates it)
   const fields: FieldConfig[] = [
     { name: "title", label: "Title", type: "text", placeholder: "Project title", required: true },
-    { name: "slug", label: "Slug (auto-generated on save)", type: "text", placeholder: "leave blank to auto-generate" },
     { name: "client", label: "Client", type: "text", placeholder: "Client name (optional)" },
     { name: "industry", label: "Industry", type: "text", placeholder: "Industry", required: true },
     { name: "liveUrl", label: "Live site URL", type: "text", placeholder: "https://example.com" },
@@ -304,6 +384,7 @@ export default function ProjectsTable() {
     <div>
       <button
         onClick={openCreateModal}
+        type="button"
         className="mb-4 inline-flex items-center gap-2 px-4 py-2 bg-brand-gold text-brand-navy rounded-full font-medium hover:bg-brand-orange transition shadow-sm"
       >
         <Plus size={16} /> Add Project
@@ -325,6 +406,7 @@ export default function ProjectsTable() {
           <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl p-6 mx-4">
             <button
               onClick={() => setModalOpen(false)}
+              type="button"
               className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100"
             >
               <X size={20} />
@@ -350,7 +432,8 @@ export default function ProjectsTable() {
                   value={formValues.mainImage}
                   onChange={(file) => handleChange("mainImage", file)}
                   previewUrl={
-                    typeof formValues.mainImage === "string"
+                    typeof formValues.mainImage === "string" &&
+                    formValues.mainImage
                       ? formValues.mainImage
                       : undefined
                   }
@@ -388,7 +471,14 @@ export default function ProjectsTable() {
               </div>
 
               {formErrors.general && (
-                <p className="text-red-500 text-sm">{formErrors.general}</p>
+                <div className="rounded-lg border border-red-200 bg-red-50 p-3">
+                  <p className="text-red-700 text-sm font-medium">
+                    Save failed
+                  </p>
+                  <p className="text-red-600 text-sm mt-1 whitespace-pre-wrap break-words">
+                    {formErrors.general}
+                  </p>
+                </div>
               )}
             </FormBuilder>
           </div>
